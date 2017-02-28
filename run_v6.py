@@ -43,7 +43,7 @@ while (count < 1):
     ('-lr',lr),
     ('-train',True)
     ]
-    acc = training_l2.main(param)
+    acc = training_l1.main(param)
     model_tag = 'pcov'+str(pcov)+'pcov'+str(pcov2)+'pfc'+str(pfc)+'pfc'+str(pfc2)
     acc_list.append(acc)
     count = count + 1
