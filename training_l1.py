@@ -105,6 +105,7 @@ def conv_network(x, weights, biases, keep_prob):
                         padding = 'VALID')
     relu = tf.nn.relu(tf.nn.bias_add(conv, biases['cov1']))
     l1_cov1 = tf.reduce_sum(tf.abs(weights['cov1']))
+    l2_cov1 = tf.nn.l2_loss(weights['cov1'])
     pool = tf.nn.max_pool(
             relu,
             ksize = [1 ,2 ,2 ,1],
@@ -117,6 +118,7 @@ def conv_network(x, weights, biases, keep_prob):
                         padding = 'VALID')
     relu = tf.nn.relu(tf.nn.bias_add(conv, biases['cov2']))
     l1_cov2 = tf.reduce_sum(tf.abs(weights['cov2']))
+    l2_cov2 = tf.nn.l2_loss(weights['cov2'])
     pool = tf.nn.max_pool(
             relu,
             ksize = [1 ,2 ,2 ,1],
@@ -129,11 +131,14 @@ def conv_network(x, weights, biases, keep_prob):
         [-1, pool_shape[1]*pool_shape[2]*pool_shape[3]])
     hidden = tf.nn.relu(tf.matmul(reshape, weights['fc1']) + biases['fc1'])
     l1_fc1 = tf.reduce_sum(tf.abs(weights['fc1']))
+    l2_fc1 = tf.nn.l2_loss(weights['fc1'])
     hidden = tf.nn.dropout(hidden, keep_prob)
     output = tf.matmul(hidden, weights['fc2']) + biases['fc2']
     l1_fc2 = tf.reduce_sum(tf.abs(weights['fc2']))
+    l2_fc2 = tf.nn.l2_loss(weights['fc2'])
     l1 = l1_cov1 + l1_cov2 + l1_fc1 + l1_fc2
-    return output , reshape, l1
+    l2 = l2_cov1 + l2_cov2 + l2_fc1 + l2_fc2
+    return output , reshape, l1, l2
 
 def calculate_non_zero_weights(weight):
     count = (weight != 0).sum()
@@ -333,14 +338,18 @@ def main(argv = None):
         x_image = tf.reshape(x,[-1,28,28,1])
         (weights, biases) = initialize_variables(model_number)
         # Construct model
-        pred, pool, loss= conv_network(x_image, weights, biases, keep_prob)
-        lambda_1 = 0.0005
+        pred, pool, l1, l2= conv_network(x_image, weights, biases, keep_prob)
+        lambda_1 = 0.00001
+        lambda_2 = 0.0005
 
-        l1_norm = lambda_1 * loss
+        l1_norm = lambda_1 * l1
+        l2_norm = lambda_2 * l2
+
+        loss = l1_norm
 
         # Define loss and optimizer
         trainer = tf.train.AdamOptimizer(learning_rate=learning_rate)
-    	cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(pred, y)) + l1_norm
+    	cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(pred, y)) + loss
 
         correct_prediction = tf.equal(tf.argmax(pred,1), tf.argmax(y,1))
         accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
@@ -394,10 +403,11 @@ def main(argv = None):
                     for i in range(total_batch):
                         # execute a pruning
                         batch_x, batch_y = mnist.train.next_batch(batch_size)
-                        _ = sess.run(train_step, feed_dict = {
+                        [_, cost_val, loss_val] = sess.run([train_step, cost, loss], feed_dict = {
                                 x: batch_x,
                                 y: batch_y,
                                 keep_prob: dropout})
+                        print("The cost value is {} and norm value is {}".format(cost_val, loss_val))
                         training_cnt = training_cnt + 1
                         if (training_cnt % 10 == 0):
                             [c, train_accuracy] = sess.run([cost, accuracy], feed_dict = {
