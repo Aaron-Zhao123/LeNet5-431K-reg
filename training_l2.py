@@ -18,7 +18,7 @@ class Usage(Exception):
         self.msg = msg
 
 # Parameters
-training_epochs = 200
+training_epochs = 400
 batch_size = 128
 display_step = 1
 
@@ -413,7 +413,7 @@ def main(argv = None):
                                 print('Epoch is {}'.format(epoch))
                                 weights_info(training_cnt, c, train_accuracy, accuracy_mean)
                         # if (training_cnt == 10):
-                        if (accuracy_mean > 0.99 or epoch > 120):
+                        if (accuracy_mean > 0.99 or epoch > 300):
                             accuracy_list = np.zeros(30)
                             accuracy_mean = 0
                             print('Training ends')

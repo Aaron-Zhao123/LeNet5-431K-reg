@@ -31,8 +31,7 @@ retrain = 0
 lr = 1e-4
 model_tag = 'pcov'+str(pcov)+'pcov'+str(pcov2)+'pfc'+str(pfc)+'pfc'+str(pfc2)
 while (count < 1):
-    print(model_tag)
-    # pfc = 1
+    pfc2 = 0
     if (retrain == 0):
         lr = 1e-4
     param = [
