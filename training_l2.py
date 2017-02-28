@@ -396,10 +396,12 @@ def main(argv = None):
                     for i in range(total_batch):
                         # execute a pruning
                         batch_x, batch_y = mnist.train.next_batch(batch_size)
-                        _ = sess.run(train_step, feed_dict = {
+                        [_, cost_val, loss_val] = sess.run([train_step, cost, loss], feed_dict = {
                                 x: batch_x,
                                 y: batch_y,
                                 keep_prob: dropout})
+                        # print("The cost value is {} and norm value is {}".format(cost_val, loss_val))
+
                         training_cnt = training_cnt + 1
                         if (training_cnt % 10 == 0):
                             [c, train_accuracy] = sess.run([cost, accuracy], feed_dict = {
