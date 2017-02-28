@@ -336,7 +336,7 @@ def main(argv = None):
         (weights, biases) = initialize_variables(model_number)
         # Construct model
         pred, pool, loss= conv_network(x_image, weights, biases, keep_prob)
-        lambda_2 = 0.000001
+        lambda_2 = 0.00001
 
         l2_norm = lambda_2 * loss
 
