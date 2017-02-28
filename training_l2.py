@@ -336,7 +336,7 @@ def main(argv = None):
         (weights, biases) = initialize_variables(model_number)
         # Construct model
         pred, pool, loss= conv_network(x_image, weights, biases, keep_prob)
-        lambda_2 = 0.0000001
+        lambda_2 = 0.000001
 
         l2_norm = lambda_2 * loss
 
@@ -396,7 +396,7 @@ def main(argv = None):
                     for i in range(total_batch):
                         # execute a pruning
                         batch_x, batch_y = mnist.train.next_batch(batch_size)
-                        [_, cost_val, loss_val] = sess.run([train_step, cost, loss], feed_dict = {
+                        [_, cost_val, loss_val] = sess.run([train_step, cost, l2_norm], feed_dict = {
                                 x: batch_x,
                                 y: batch_y,
                                 keep_prob: dropout})
