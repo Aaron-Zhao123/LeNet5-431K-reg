@@ -282,6 +282,8 @@ def main(argv = None):
                     TRAIN = val
                 if (opt == '-lr'):
                     learning_rate = val
+                if (opt == '-train'):
+                    TRAIN = val
             print('pruning percentage for cov and fc are {},{}'.format(pruning_cov, pruning_fc))
             print('Train values:',TRAIN)
         except getopt.error, msg:

@@ -1,5 +1,6 @@
 import os
 import training_l1
+import training_l2
 # os.system('python training_v3.py -p0')
 # os.system('python training_v3.py -p1')
 # os.system('python training_v3.py -p2')
@@ -11,7 +12,7 @@ import training_l1
 acc_list = []
 count = 0
 pcov = 0
-pfc = 0
+pfc = 1
 pcov2 = 0
 pfc2 = 0
 # model_tag = 'pcov'+str(pcov)+'pcov'+str(pcov2)+'pfc'+str(pfc)+'pfc'+str(pfc2)
@@ -30,7 +31,8 @@ retrain = 0
 lr = 1e-4
 model_tag = 'pcov'+str(pcov)+'pcov'+str(pcov2)+'pfc'+str(pfc)+'pfc'+str(pfc2)
 while (count < 1):
-    pfc = pfc+1
+    print(model_tag)
+    # pfc = 1
     if (retrain == 0):
         lr = 1e-4
     param = [
@@ -39,9 +41,10 @@ while (count < 1):
     ('-pfc',pfc),
     ('-pfc2',pfc2),
     ('-m',model_tag),
-    ('-lr',lr)
+    ('-lr',lr),
+    ('-train',True)
     ]
-    acc = training_l1.main(param)
+    acc = training_l2.main(param)
     model_tag = 'pcov'+str(pcov)+'pcov'+str(pcov2)+'pfc'+str(pfc)+'pfc'+str(pfc2)
     acc_list.append(acc)
     count = count + 1
