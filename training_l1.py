@@ -270,7 +270,7 @@ def main(argv = None):
             TRAIN = True
             learning_rate = 1e-4
             dropout = 1
-            lambda_1 = 0.00001
+            # lambda_1 = 0.00001
             lambda_2 = 0.0005
             weight_file_name = 'tmp'
             for item in opts:
