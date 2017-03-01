@@ -49,7 +49,7 @@ for elem in lambda1_list:
     ('-train',True),
     ('-weight_file_name', save_name)
     ]
-    acc = training_l2.main(param)
+    acc = training_l1.main(param)
     model_tag = 'pcov'+str(pcov)+'pcov'+str(pcov2)+'pfc'+str(pfc)+'pfc'+str(pfc2)
     acc_list.append(acc)
 
