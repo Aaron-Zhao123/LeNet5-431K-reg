@@ -30,10 +30,12 @@ pfc2 = 0
 retrain = 0
 lr = 1e-4
 model_tag = 'pcov'+str(pcov)+'pcov'+str(pcov2)+'pfc'+str(pfc)+'pfc'+str(pfc2)
-while (count < 1):
-    pfc2 = 0
-    if (retrain == 0):
-        lr = 1e-4
+lambda1_list = [1e-4, 1e-5, 1e-6]
+lambda2 = 0.0005
+dropout_rate = 1
+
+for elem in lambda1_list:
+    save_name = 'tmp' + str(lambda1_list.index(elem)) + '.pkl'
     param = [
     ('-pcov',pcov),
     ('-pcov2',pcov2),
@@ -41,22 +43,16 @@ while (count < 1):
     ('-pfc2',pfc2),
     ('-m',model_tag),
     ('-lr',lr),
-    ('-train',True)
+    ('-norm1',elem),
+    ('-norm2',lambda2),
+    ('-dropout',dropout_rate),
+    ('-train',True),
+    ('-weight_file_name', save_name)
     ]
     acc = training_l1.main(param)
     model_tag = 'pcov'+str(pcov)+'pcov'+str(pcov2)+'pfc'+str(pfc)+'pfc'+str(pfc2)
     acc_list.append(acc)
-    count = count + 1
-    if (acc < 0.99):
-        retrain += 1
-        lr = lr / float(2)
-        if (retrain > 2):
-            print("lowest precision")
-            break
-    else:
-        if (retrain != 0):
-            retrain = 0
 
-print (acc)
+print (acc_list)
 
 print('accuracy summary: {}'.format(acc_list))

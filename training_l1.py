@@ -31,7 +31,6 @@ n_hidden_1 = 300# 1st layer number of features
 n_hidden_2 = 100# 2nd layer number of features
 n_input = 784 # MNIST data input (img shape: 28*28)
 n_classes = 10 # MNIST total classes (0-9 digits)
-dropout = 0.5
 
 
 
@@ -270,6 +269,10 @@ def main(argv = None):
             PRUNE_ONLY = False
             TRAIN = True
             learning_rate = 1e-4
+            dropout = 1
+            lambda_1 = 0.00001
+            lambda_2 = 0.0005
+            weight_file_name = 'tmp'
             for item in opts:
                 print (item)
                 opt = item[0]
@@ -290,6 +293,14 @@ def main(argv = None):
                     TRAIN = val
                 if (opt == '-lr'):
                     learning_rate = val
+                if (opt == '-norm1'):
+                    lambda_1 = val
+                if (opt == '-norm2'):
+                    lambda_2 = val
+                if (opt == '-dropout'):
+                    dropout = val
+                if (opt == '-weight_file_name'):
+                    weight_file_name = val
             print('pruning percentage for cov and fc are {},{}'.format(pruning_cov, pruning_fc))
             print('Train values:',TRAIN)
         except getopt.error, msg:
@@ -342,8 +353,8 @@ def main(argv = None):
         (weights, biases) = initialize_variables(model_number)
         # Construct model
         pred, pool, l1, l2= conv_network(x_image, weights, biases, keep_prob)
-        lambda_1 = 0.00001
-        lambda_2 = 0.0005
+        # lambda_1 = 0.00001
+        # lambda_2 = 0.0005
 
         l1_norm = lambda_1 * l1
         l2_norm = lambda_2 * l2
@@ -435,7 +446,7 @@ def main(argv = None):
                             print('test accuracy is {}'.format(test_accuracy))
                             # if (test_accuracy > 0.990 or epoch > 400):
                             if (epoch > 400):
-                                file_name = 'norm1/'+'pcov'+str(pruning_cov)+'pcov'+str(pruning_cov2)+'pfc'+str(pruning_fc)+ 'pfc'+ str(pruning_fc2)+'.pkl'
+                                file_name = 'norm1/'+ weight_file_name
                                 with open(file_name, 'wb') as f:
                                     pickle.dump((
                                         weights['cov1'].eval(),
