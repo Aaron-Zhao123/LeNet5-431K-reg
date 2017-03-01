@@ -271,7 +271,7 @@ def main(argv = None):
             learning_rate = 1e-4
             dropout = 1
             # lambda_1 = 0.00001
-            lambda_2 = 0.0005
+            # lambda_2 = 0.0005
             weight_file_name = 'tmp'
             for item in opts:
                 print (item)
@@ -359,7 +359,7 @@ def main(argv = None):
         l1_norm = lambda_1 * l1
         l2_norm = lambda_2 * l2
 
-        loss = l1_norm
+        loss = l2_norm
 
         # Define loss and optimizer
         trainer = tf.train.AdamOptimizer(learning_rate=learning_rate)
@@ -446,7 +446,7 @@ def main(argv = None):
                             print('test accuracy is {}'.format(test_accuracy))
                             # if (test_accuracy > 0.990 or epoch > 400):
                             if (epoch > 300 or test_accuracy > 0.990):
-                                file_name = 'norm1/'+ weight_file_name
+                                file_name = 'norm2/'+ weight_file_name
                                 with open(file_name, 'wb') as f:
                                     pickle.dump((
                                         weights['cov1'].eval(),

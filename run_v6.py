@@ -30,7 +30,7 @@ pfc2 = 0
 retrain = 0
 lr = 1e-4
 model_tag = 'pcov'+str(pcov)+'pcov'+str(pcov2)+'pfc'+str(pfc)+'pfc'+str(pfc2)
-lambda1_list = [1e-3, 1e-4, 1e-5, 1e-6, 1e-7]
+lambda1_list = [1e-2, 1e-3, 1e-4, 1e-5, 1e-6]
 lambda2 = 0.0005
 dropout_rate = 1
 
@@ -49,7 +49,7 @@ for elem in lambda1_list:
     ('-train',True),
     ('-weight_file_name', save_name)
     ]
-    acc = training_l1.main(param)
+    acc = training_l2.main(param)
     model_tag = 'pcov'+str(pcov)+'pcov'+str(pcov2)+'pfc'+str(pfc)+'pfc'+str(pfc2)
     acc_list.append(acc)
 
