@@ -48,8 +48,8 @@ for elem in lambda2_list:
     ('-pfc2',pfc2),
     ('-m',model_tag),
     ('-lr',lr),
-    ('-norm1',5e-6),
-    ('-norm2',1e-5),
+    ('-norm1',5e-5),
+    ('-norm2',5e-4),
     ('-dropout', 1),
     ('-train',True),
     ('-weight_file_name', save_name)
