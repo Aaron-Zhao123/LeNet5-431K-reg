@@ -359,8 +359,7 @@ def main(argv = None):
         l1_norm = lambda_1 * l1
         l2_norm = lambda_2 * l2
 
-        loss = l2_norm
-
+        loss = 0
         # Define loss and optimizer
         trainer = tf.train.AdamOptimizer(learning_rate=learning_rate)
     	cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(pred, y)) + loss
@@ -446,7 +445,7 @@ def main(argv = None):
                             print('test accuracy is {}'.format(test_accuracy))
                             # if (test_accuracy > 0.990 or epoch > 400):
                             if (epoch > 300 or test_accuracy > 0.990):
-                                file_name = 'norm2/'+ weight_file_name
+                                file_name = 'dropout/'+ weight_file_name
                                 with open(file_name, 'wb') as f:
                                     pickle.dump((
                                         weights['cov1'].eval(),

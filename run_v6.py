@@ -32,10 +32,11 @@ lr = 1e-4
 model_tag = 'pcov'+str(pcov)+'pcov'+str(pcov2)+'pfc'+str(pfc)+'pfc'+str(pfc2)
 lambda1_list = [1e-3, 1e-4, 1e-5, 1e-6, 1e-7]
 lambda2_list = [1e-2, 1e-3, 1e-4, 1e-5, 1e-6]
+dropout_rate_list= [0.2, 0.4, 0.6, 0.8, 1]
 lambda2 = 0.0005
 dropout_rate = 1
 
-for elem in lambda2_list:
+for elem in dropout_rate_list:
     save_name = 'tmp' + str(lambda2_list.index(elem)) + '.pkl'
     param = [
     ('-pcov',pcov),
@@ -45,8 +46,8 @@ for elem in lambda2_list:
     ('-m',model_tag),
     ('-lr',lr),
     ('-norm1',0),
-    ('-norm2',elem),
-    ('-dropout',dropout_rate),
+    ('-norm2',0),
+    ('-dropout',elem),
     ('-train',True),
     ('-weight_file_name', save_name)
     ]
