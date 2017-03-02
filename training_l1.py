@@ -434,7 +434,8 @@ def main(argv = None):
                                 print('Epoch is {}'.format(epoch))
                                 weights_info(training_cnt, c, train_accuracy, accuracy_mean)
                         # if (training_cnt == 10):
-                        if (accuracy_mean > 0.99 or epoch > 300):
+                        # if (accuracy_mean > 0.99 or epoch > 300):
+                        if (epoch > 300):
                             accuracy_list = np.zeros(30)
                             accuracy_mean = 0
                             print('Training ends')
@@ -443,8 +444,8 @@ def main(argv = None):
                                     y: mnist.test.labels[:],
                                     keep_prob: 1.})
                             print('test accuracy is {}'.format(test_accuracy))
-                            # if (test_accuracy > 0.990 or epoch > 400):
-                            if (epoch > 300 or test_accuracy > 0.990):
+                            # if (epoch > 300 or test_accuracy > 0.990):
+                            if (epoch > 300):
                                 file_name = 'dropout/'+ weight_file_name
                                 with open(file_name, 'wb') as f:
                                     pickle.dump((
