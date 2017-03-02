@@ -359,11 +359,11 @@ def main(argv = None):
         l1_norm = lambda_1 * l1
         l2_norm = lambda_2 * l2
 
-        loss = 0
+        loss = l2_norm
+
         # Define loss and optimizer
         trainer = tf.train.AdamOptimizer(learning_rate=learning_rate)
-    	cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(pred, y)) + loss
-
+    	cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(pred, y))
         correct_prediction = tf.equal(tf.argmax(pred,1), tf.argmax(y,1))
         accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
