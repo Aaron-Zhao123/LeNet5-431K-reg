@@ -40,7 +40,7 @@ dropout_rate = 1
 
 for elem in lambda2_list:
     # save_name = 'tmp' + str(dropout_rate_list.index(elem) + 1) + '.pkl'
-    save_name = 'l1l2' + '.pkl'
+    save_name = 'tmp' + '.pkl'
     param = [
     ('-pcov',pcov),
     ('-pcov2',pcov2),
@@ -48,8 +48,8 @@ for elem in lambda2_list:
     ('-pfc2',pfc2),
     ('-m',model_tag),
     ('-lr',lr),
-    ('-norm1',5e-5),
-    ('-norm2',1e-4),
+    ('-norm1',5e-6),
+    ('-norm2',1e-5),
     ('-dropout', 1),
     ('-train',True),
     ('-weight_file_name', save_name)
