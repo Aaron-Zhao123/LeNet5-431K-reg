@@ -420,7 +420,7 @@ def main(argv = None):
                                 x: batch_x,
                                 y: batch_y,
                                 keep_prob: dropout})
-                        # print("The cost value is {} and norm value is {}".format(cost_val, loss_val))
+                        print("The cost value is {} and norm value is {}".format(cost_val, loss_val))
                         training_cnt = training_cnt + 1
                         if (training_cnt % 10 == 0):
                             [c, train_accuracy] = sess.run([cost, accuracy], feed_dict = {
@@ -434,8 +434,8 @@ def main(argv = None):
                                 print('Epoch is {}'.format(epoch))
                                 weights_info(training_cnt, c, train_accuracy, accuracy_mean)
                         # if (training_cnt == 10):
-                        # if (accuracy_mean > 0.99 or epoch > 300):
-                        if (epoch > 300):
+                        if (accuracy_mean > 0.99 or epoch > 300):
+                        # if (epoch > 300):
                             accuracy_list = np.zeros(30)
                             accuracy_mean = 0
                             print('Training ends')
@@ -444,9 +444,9 @@ def main(argv = None):
                                     y: mnist.test.labels[:],
                                     keep_prob: 1.})
                             print('test accuracy is {}'.format(test_accuracy))
-                            # if (epoch > 300 or test_accuracy > 0.990):
-                            if (epoch > 300):
-                                file_name = './'+ weight_file_name
+                            if (epoch > 300 or test_accuracy > 0.990):
+                            # if (epoch > 300):
+                                file_name = 'norm12/'+ weight_file_name
                                 with open(file_name, 'wb') as f:
                                     pickle.dump((
                                         weights['cov1'].eval(),
