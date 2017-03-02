@@ -50,7 +50,7 @@ for elem in dropout_rate_list:
     ('-lr',lr),
     ('-norm1',0),
     ('-norm2',0),
-    ('-dropout', 1),
+    ('-dropout', elem),
     ('-train',True),
     ('-weight_file_name', save_name)
     ]

@@ -422,7 +422,7 @@ def main(argv = None):
                                 keep_prob: dropout})
                         training_cnt = training_cnt + 1
                         if (training_cnt % 10 == 0):
-                            print("The cost value is {} and norm value is {},{}".format(cost_val, l1, l2))
+                            # print("The cost value is {} and norm value is {},{}".format(cost_val, l1, l2))
                             [c, train_accuracy] = sess.run([cost, accuracy], feed_dict = {
                                 x: batch_x,
                                 y: batch_y,
@@ -430,6 +430,7 @@ def main(argv = None):
                             accuracy_list = np.concatenate((np.array([train_accuracy]),accuracy_list[0:29]))
                             accuracy_mean = np.mean(accuracy_list)
                             if (training_cnt % 100 == 0):
+                                print('dropout is {}'.format(dropout))
                                 print('accuracy mean is {}'.format(accuracy_mean))
                                 print('Epoch is {}'.format(epoch))
                                 weights_info(training_cnt, c, train_accuracy, accuracy_mean)
