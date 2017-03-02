@@ -38,8 +38,9 @@ dropout_rate_list= [0.4, 0.6, 0.8]
 lambda2 = 0.0005
 dropout_rate = 1
 
-for elem in dropout_rate_list:
-    save_name = 'tmp' + str(dropout_rate_list.index(elem) + 1) + '.pkl'
+for elem in lambda2_list:
+    # save_name = 'tmp' + str(dropout_rate_list.index(elem) + 1) + '.pkl'
+    save_name = 'org' + '.pkl'
     param = [
     ('-pcov',pcov),
     ('-pcov2',pcov2),
@@ -49,7 +50,7 @@ for elem in dropout_rate_list:
     ('-lr',lr),
     ('-norm1',0),
     ('-norm2',0),
-    ('-dropout',elem),
+    ('-dropout', 1),
     ('-train',True),
     ('-weight_file_name', save_name)
     ]
