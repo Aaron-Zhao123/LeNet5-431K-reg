@@ -359,7 +359,7 @@ def main(argv = None):
         l1_norm = lambda_1 * l1
         l2_norm = lambda_2 * l2
 
-        loss = l2_norm
+        loss = l2_norm + l1_norm
 
         # Define loss and optimizer
         trainer = tf.train.AdamOptimizer(learning_rate=learning_rate)
@@ -416,11 +416,11 @@ def main(argv = None):
                     for i in range(total_batch):
                         # execute a pruning
                         batch_x, batch_y = mnist.train.next_batch(batch_size)
-                        [_, cost_val, loss_val] = sess.run([train_step, cost, loss], feed_dict = {
+                        [_, cost_val, l1, l2] = sess.run([train_step, cost, l1_norm, l2_norm], feed_dict = {
                                 x: batch_x,
                                 y: batch_y,
                                 keep_prob: dropout})
-                        print("The cost value is {} and norm value is {}".format(cost_val, loss_val))
+                        print("The cost value is {} and norm value is {},{}".format(cost_val, l1, l2))
                         training_cnt = training_cnt + 1
                         if (training_cnt % 10 == 0):
                             [c, train_accuracy] = sess.run([cost, accuracy], feed_dict = {
