@@ -37,7 +37,7 @@ lambda2 = 0.0005
 dropout_rate = 1
 
 for elem in dropout_rate_list:
-    save_name = 'tmp' + str(lambda2_list.index(elem)) + '.pkl'
+    save_name = 'tmp' + str(dropout_rate_list.index(elem)) + '.pkl'
     param = [
     ('-pcov',pcov),
     ('-pcov2',pcov2),
