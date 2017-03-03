@@ -13,7 +13,7 @@ np.set_printoptions(precision=128)
 open_file_name = '/Users/aaron/Projects/Mphil_project/tmp_asyn_prune/pcov91pcov91pfc995pfc91.pkl'
 # open_file_name = 'weights_log/pcov90pfc90'+'.pkl'
 # open_file_name = 'weights_log/weights2.pkl'
-Test = True;
+Test = False;
 # Test = False;
 MASK_GEN = True
 # MASK_GEN = False
@@ -225,14 +225,14 @@ if (Test):
     print('total number of weights: is now: {}, originally, there are {} parameters'.format(total_weights_cnt, total_non_zero))
 else:
     # train the model
-    for i in range(200000):
+    for i in range(20000):
     # for i in range(2000):
       batch = mnist.train.next_batch(64)
       if i%100 == 0:
         train_accuracy = accuracy.eval(feed_dict={
             x:batch[0], y_: batch[1], keep_prob: 1.0})
         print("step %d, training accuracy %g"%(i, train_accuracy))
-      train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
+      train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.2})
 
 predict = y_conv.eval({x: mnist.test.images[:64],
                                     y_: mnist.test.labels[:64],
@@ -257,7 +257,7 @@ if (DUMP_WEIGHTS == True):
     dump_weights()
 if (Test == False):
     print("store weights and biases")
-    with open('weights.pkl','wb') as f:
+    with open('tmp/tmp0.pkl','wb') as f:
         pickle.dump((
             W_conv1.eval(),
             W_conv2.eval(),
