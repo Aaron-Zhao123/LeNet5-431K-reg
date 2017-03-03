@@ -402,7 +402,7 @@ def main(argv = None):
             training_cnt = 0
             pruning_cnt = 0
             train_accuracy = 0
-            accuracy_list = np.zeros(30)
+            accuracy_list = np.zeros(200)
             accuracy_mean = 0
             c = 0
             train_accuracy = 0
@@ -427,7 +427,7 @@ def main(argv = None):
                                 x: batch_x,
                                 y: batch_y,
                                 keep_prob: 1.})
-                            accuracy_list = np.concatenate((np.array([train_accuracy]),accuracy_list[0:29]))
+                            accuracy_list = np.concatenate((np.array([train_accuracy]),accuracy_list[0:199]))
                             accuracy_mean = np.mean(accuracy_list)
                             if (training_cnt % 100 == 0):
                                 print('dropout is {}'.format(dropout))
@@ -435,9 +435,9 @@ def main(argv = None):
                                 print('Epoch is {}'.format(epoch))
                                 weights_info(training_cnt, c, train_accuracy, accuracy_mean)
                         # if (training_cnt == 10):
-                        if (accuracy_mean > 0.99 or epoch > 200):
+                        if (accuracy_mean > 0.985 or epoch > 300):
                         # if (epoch > 300):
-                            accuracy_list = np.zeros(30)
+                            accuracy_list = np.zeros(200)
                             accuracy_mean = 0
                             print('Training ends')
                             test_accuracy = accuracy.eval({
@@ -445,7 +445,7 @@ def main(argv = None):
                                     y: mnist.test.labels[:],
                                     keep_prob: 1.})
                             print('test accuracy is {}'.format(test_accuracy))
-                            if (epoch > 200 or test_accuracy > 0.990):
+                            if (epoch > 300 or test_accuracy > 0.990):
                             # if (epoch > 300):
                                 file_name = 'dropout/'+ weight_file_name
                                 with open(file_name, 'wb') as f:
