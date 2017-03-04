@@ -1,6 +1,6 @@
 import os
 import training_l1
-import training_l2
+import compute_lambda
 # os.system('python training_v3.py -p0')
 # os.system('python training_v3.py -p1')
 # os.system('python training_v3.py -p2')
@@ -41,6 +41,7 @@ dropout_rate = 1
 for elem in dropout_rate_list:
     save_name = 'tmp' + str(dropout_rate_list.index(elem) + 1) + '.pkl'
     # save_name = 'tmp' + '.pkl'
+    l1,l2 = compute_lambda.main(None)
     param = [
     ('-pcov',pcov),
     ('-pcov2',pcov2),
@@ -48,8 +49,8 @@ for elem in dropout_rate_list:
     ('-pfc2',pfc2),
     ('-m',model_tag),
     ('-lr',lr),
-    ('-norm1',0),
-    ('-norm2',0),
+    ('-norm1',l1),
+    ('-norm2',l2),
     ('-dropout', elem),
     ('-train',True),
     ('-weight_file_name', save_name)
