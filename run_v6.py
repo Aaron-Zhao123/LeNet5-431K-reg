@@ -33,8 +33,8 @@ model_tag = 'pcov'+str(pcov)+'pcov'+str(pcov2)+'pfc'+str(pfc)+'pfc'+str(pfc2)
 # lambda1_list = [1e-3, 1e-4, 1e-5, 1e-6, 1e-7]
 # lambda2_list = [1e-2, 1e-3, 1e-4, 1e-5, 1e-6]
 lambda2_list = [1e-4]
-dropout_rate_list= [0.2, 0.4, 0.6, 0.8, 1]
-# dropout_rate_list= [0.4, 0.6, 0.8]
+# dropout_rate_list= [0.2, 0.4, 0.6, 0.8, 1]
+dropout_rate_list= [1]
 lambda2 = 0.0005
 dropout_rate = 1
 
