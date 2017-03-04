@@ -468,7 +468,7 @@ def main(argv = None):
                             print('test accuracy is {}'.format(test_accuracy))
                             if (epoch > 300 or test_accuracy > 0.990):
                             # if (epoch > 300):
-                                file_name = 'dropout/'+ weight_file_name
+                                file_name = 'l1l2norm/'+ weight_file_name
                                 with open(file_name, 'wb') as f:
                                     pickle.dump((
                                         weights['cov1'].eval(),
