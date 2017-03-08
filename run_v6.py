@@ -38,6 +38,7 @@ dropout_rate_list= [0.8]
 c_list = [0.5,1,2,4,10]
 lambda2 = 0.0005
 dropout_rate = 1
+parent_dir = './shakeout/'
 
 for c in c_list:
     save_name = 'tmp' + str(c_list.index(c) + 1) + '.pkl'
@@ -55,7 +56,8 @@ for c in c_list:
     ('-dropout', 0.5),
     ('-train',True),
     ('-weight_file_name', save_name),
-    ('-shakeout_c', c)
+    ('-shakeout_c', c),
+    ('-parent_dir', parent_dir)
     ]
     acc = training_l1.main(param)
     model_tag = 'pcov'+str(pcov)+'pcov'+str(pcov2)+'pfc'+str(pfc)+'pfc'+str(pfc2)

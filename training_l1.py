@@ -330,6 +330,8 @@ def main(argv = None):
                     weight_file_name = val
                 if (opt == '-shakeout_c'):
                     shakeout_const = val
+                if (opt == '-parent_dir'):
+                    parent_dir = val
             print('pruning percentage for cov and fc are {},{}'.format(pruning_cov, pruning_fc))
             print('Train values:',TRAIN)
         except getopt.error, msg:
@@ -490,7 +492,7 @@ def main(argv = None):
                             print('test accuracy is {}'.format(test_accuracy))
                             if (epoch > 300 or test_accuracy > 0.990):
                             # if (epoch > 300):
-                                file_name = 'l1l2norm/'+ weight_file_name
+                                file_name = parent_dir + weight_file_name
                                 with open(file_name, 'wb') as f:
                                     pickle.dump((
                                         weights['cov1'].eval(),
