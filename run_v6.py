@@ -12,7 +12,7 @@ import compute_lambda
 acc_list = []
 count = 0
 pcov = 0
-pfc = 1
+pfc = 0
 pcov2 = 0
 pfc2 = 0
 # model_tag = 'pcov'+str(pcov)+'pcov'+str(pcov2)+'pfc'+str(pfc)+'pfc'+str(pfc2)
@@ -34,12 +34,13 @@ model_tag = 'pcov'+str(pcov)+'pcov'+str(pcov2)+'pfc'+str(pfc)+'pfc'+str(pfc2)
 # lambda2_list = [1e-2, 1e-3, 1e-4, 1e-5, 1e-6]
 lambda2_list = [1e-4]
 # dropout_rate_list= [0.2, 0.4, 0.6, 0.8, 1]
-dropout_rate_list= [1]
+dropout_rate_list= [0.8]
+c_list = [0.5,1,2,4,10]
 lambda2 = 0.0005
 dropout_rate = 1
 
-for elem in dropout_rate_list:
-    save_name = 'tmp' + str(dropout_rate_list.index(elem) + 1) + '.pkl'
+for c in c_list:
+    save_name = 'tmp' + str(c_list.index(c) + 1) + '.pkl'
     # save_name = 'tmp' + '.pkl'
     l1,l2 = compute_lambda.main(None)
     param = [
@@ -49,11 +50,12 @@ for elem in dropout_rate_list:
     ('-pfc2',pfc2),
     ('-m',model_tag),
     ('-lr',lr),
-    ('-norm1',l1),
-    ('-norm2',l2),
-    ('-dropout', elem),
+    ('-norm1',0),
+    ('-norm2',0),
+    ('-dropout', 0.5),
     ('-train',True),
-    ('-weight_file_name', save_name)
+    ('-weight_file_name', save_name),
+    ('-shakeout_c', c)
     ]
     acc = training_l1.main(param)
     model_tag = 'pcov'+str(pcov)+'pcov'+str(pcov2)+'pfc'+str(pfc)+'pfc'+str(pfc2)

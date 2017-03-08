@@ -233,7 +233,11 @@ else:
             x:batch[0], y_: batch[1], keep_prob: 1.0})
         print("step %d, training accuracy %g"%(i, train_accuracy))
       train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.2})
-
+    #   h1_val = h_fc1.eval(feed_dict={
+    #       x:batch[0], y_: batch[1], keep_prob: 0.2})
+    #   h1_val_drop = h_fc1_drop.eval(feed_dict={
+    #       x:batch[0], y_: batch[1], keep_prob: 0.2})
+    #   print("{} \n {}".format(h1_val.flatten()[0:20], h1_val_drop.flatten()[0:20]))
 predict = y_conv.eval({x: mnist.test.images[:64],
                                     y_: mnist.test.labels[:64],
                                     keep_prob: 1.0})

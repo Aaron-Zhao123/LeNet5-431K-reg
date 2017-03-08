@@ -106,7 +106,7 @@ def initialize_variables(model_number):
 #     'fc2': np.ones([512, NUM_LABELS])
 # }
 # Create model
-def conv_network(x, weights, biases, keep_prob):
+def conv_network(x, weights, biases, keep_prob, c = 10.):
     conv = tf.nn.conv2d(x,
                         weights['cov1'],
                         strides = [1,1,1,1],
@@ -133,20 +133,22 @@ def conv_network(x, weights, biases, keep_prob):
             strides = [1, 2, 2, 1],
             padding = 'VALID')
     '''get pool shape'''
-    pool_shape = pool.get_shape().as_list()
-    reshape = tf.reshape(
-        pool,
-        [-1, pool_shape[1]*pool_shape[2]*pool_shape[3]])
-    hidden = tf.nn.relu(tf.matmul(reshape, weights['fc1']) + biases['fc1'])
+    # pool_shape = pool.get_shape().as_list()
+    # reshape = tf.reshape(
+    #     pool,
+    #     [-1, pool_shape[1]*pool_shape[2]*pool_shape[3]])
+    reshape = tf.reshape(pool, [-1, 4*4*50])
+    h1_fc = tf.nn.relu(tf.matmul(reshape, weights['fc1']) + biases['fc1'])
     l1_fc1 = tf.reduce_sum(tf.abs(weights['fc1']))
     l2_fc1 = tf.nn.l2_loss(weights['fc1'])
-    hidden = tf.nn.dropout(hidden, keep_prob)
-    output = tf.matmul(hidden, weights['fc2']) + biases['fc2']
+    # h1_fc_drop  = tf.nn.dropout(h1_fc, keep_prob)
+    h1_fc_drop, prob, rj_hat, wj, rj, k_rate = shakeout(h1_fc, weights['fc1'], c, keep_prob)
+    output = tf.matmul(h1_fc_drop, weights['fc2']) + biases['fc2']
     l1_fc2 = tf.reduce_sum(tf.abs(weights['fc2']))
     l2_fc2 = tf.nn.l2_loss(weights['fc2'])
     l1 = l1_cov1 + l1_cov2 + l1_fc1 + l1_fc2
     l2 = l2_cov1 + l2_cov2 + l2_fc1 + l2_fc2
-    return output , reshape, l1, l2
+    return output , reshape, l1, l2, h1_fc, h1_fc_drop, prob, rj_hat, wj, rj, k_rate
 
 def calculate_non_zero_weights(weight):
     count = (weight != 0).sum()
@@ -250,9 +252,18 @@ def plot_weights(weights,pruning_info):
             index = index + 1
         fig.savefig('fig_v3/weights'+pruning_info)
         plt.close(fig)
-def shakeout(weights):
-    pass
 
+def shakeout(x, weights, c = 100, keep_rate = 0.8):
+    # keep rate = 1 -tau
+    # random generation of t between (0,1)
+    prob = tf.random_uniform(tf.shape(x), dtype=tf.float32, minval = 0., maxval = 1.)
+    rj_hat = (prob > (1.0-keep_rate))
+    wj = tf.reduce_sum(tf.abs(weights), 0)
+    rj = tf.cast(rj_hat, tf.float32) / (keep_rate)
+    factor = rj + c * (rj - 1) / wj
+    x = factor * x
+    test_rate = keep_rate
+    return x, prob, rj_hat, wj, rj, keep_rate
 
 
 def ClipIfNotNone(grad):
@@ -285,6 +296,7 @@ def main(argv = None):
             TRAIN = True
             learning_rate = 1e-4
             dropout = 1
+            shakeout_const = 10.
             # lambda_1 = 0.00001
             # lambda_2 = 0.0005
             weight_file_name = 'tmp'
@@ -316,6 +328,8 @@ def main(argv = None):
                     dropout = val
                 if (opt == '-weight_file_name'):
                     weight_file_name = val
+                if (opt == '-shakeout_c'):
+                    shakeout_const = val
             print('pruning percentage for cov and fc are {},{}'.format(pruning_cov, pruning_fc))
             print('Train values:',TRAIN)
         except getopt.error, msg:
@@ -367,7 +381,7 @@ def main(argv = None):
         x_image = tf.reshape(x,[-1,28,28,1])
         (weights, biases) = initialize_variables(model_number)
         # Construct model
-        pred, pool, l1, l2= conv_network(x_image, weights, biases, keep_prob)
+        pred, pool, l1, l2, hidden_before, hidden_after,  prob, rj_hat, wj, rj, k_rate= conv_network(x_image, weights, biases, keep_prob, shakeout_const)
         # lambda_1 = 0.00001
         # lambda_2 = 0.0005
 
@@ -398,6 +412,7 @@ def main(argv = None):
         new_grads = mask_gradients(weights, org_grads, weights_mask, biases, biases_mask)
 
         train_step = trainer.apply_gradients(new_grads)
+        # train_step = tf.train.AdamOptimizer(1e-4).minimize(cost)
 
 
         init = tf.initialize_all_variables()
@@ -437,13 +452,20 @@ def main(argv = None):
                     for i in range(total_batch):
                         # execute a pruning
                         batch_x, batch_y = mnist.train.next_batch(batch_size)
-                        [_, cost_val, l1, l2] = sess.run([train_step, cost, l1_norm, l2_norm], feed_dict = {
+                        [_, cost_val, l1, l2, hb, ha,  prob_val, rj_hat_val, wj_val, rj_val, k_val] = sess.run([train_step, cost, l1_norm, l2_norm, hidden_before, hidden_after,  prob, rj_hat, wj, rj, k_rate], feed_dict = {
                                 x: batch_x,
                                 y: batch_y,
                                 keep_prob: dropout})
                         training_cnt = training_cnt + 1
                         if (training_cnt % 10 == 0):
                             print("The cost value is {} and norm value is {},{}".format(cost_val, l1, l2))
+                            # hb = hb.flatten()
+                            # ha = ha.flatten()
+                            # print("Test shakeout: before is \n {} \n and after is \n{}".format(hb[0:20], ha[0:20]))
+                            # print(prob_val.flatten()[0:20])
+                            # print(rj_val.flatten()[0:20])
+                            # print(rj_hat_val.flatten()[0:20])
+                            # print(k_val)
                             [c, train_accuracy] = sess.run([cost, accuracy], feed_dict = {
                                 x: batch_x,
                                 y: batch_y,
