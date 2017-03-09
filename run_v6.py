@@ -57,7 +57,7 @@ for shake_rate in shakeout_rate_list:
     ('-dropout', shake_rate),
     ('-train',True),
     ('-weight_file_name', save_name),
-    ('-shakeout_c', c),
+    ('-shakeout_c', 10.),
     ('-parent_dir', parent_dir)
     ]
     acc = training_l1.main(param)
