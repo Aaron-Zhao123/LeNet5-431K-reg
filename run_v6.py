@@ -33,14 +33,15 @@ model_tag = 'pcov'+str(pcov)+'pcov'+str(pcov2)+'pfc'+str(pfc)+'pfc'+str(pfc2)
 # lambda1_list = [1e-3, 1e-4, 1e-5, 1e-6, 1e-7]
 # lambda2_list = [1e-2, 1e-3, 1e-4, 1e-5, 1e-6]
 lambda2_list = [1e-4]
-# dropout_rate_list= [0.2, 0.4, 0.6, 0.8, 1]
+dropout_rate_list= [0.2, 0.4, 0.6, 0.8, 1]
+shakeout_rate_list = [0.2, 0.4, 0.6, 0.8, 1]
 dropout_rate_list= [0.8]
 c_list = [0.5,1,2,4,10]
 lambda2 = 0.0005
 dropout_rate = 1
 parent_dir = './shakeout/'
 
-for c in c_list:
+for shake_rate in shakeout_rate_list:
     save_name = 'tmp' + str(c_list.index(c) + 1) + '.pkl'
     # save_name = 'tmp' + '.pkl'
     l1,l2 = compute_lambda.main(None)
@@ -53,7 +54,7 @@ for c in c_list:
     ('-lr',lr),
     ('-norm1',0),
     ('-norm2',0),
-    ('-dropout', 0.5),
+    ('-dropout', shake_rate),
     ('-train',True),
     ('-weight_file_name', save_name),
     ('-shakeout_c', c),
