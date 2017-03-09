@@ -42,7 +42,7 @@ dropout_rate = 1
 parent_dir = './shakeout/'
 
 for shake_rate in shakeout_rate_list:
-    save_name = 'tmp' + str(c_list.index(c) + 1) + '.pkl'
+    save_name = 'tmp' + str(shakeout_rate_list.index(shake_rate) + 1) + '.pkl'
     # save_name = 'tmp' + '.pkl'
     l1,l2 = compute_lambda.main(None)
     param = [
