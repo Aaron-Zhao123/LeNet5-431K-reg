@@ -168,7 +168,10 @@ def main(argv = None):
         for item in argv:
             if (item[0] == '-PREV_EXIST'):
                 PREV_EXIST = item[1]
-        # if (item[0] == 'sss'):
+            if (item[0] == '-parent_dir'):
+                parent_dir = item[1]
+            if (item[0] == '-file_name'):
+                f_name = item[1]
 
     mnist = input_data.read_data_sets("MNIST.data/", one_hot = True)
     # tf Graph input
@@ -180,8 +183,9 @@ def main(argv = None):
 
     x_image = tf.reshape(x,[-1,28,28,1])
     # dir_name = '/Users/aaron/Projects/Mphil_project/tmp_LeNet5_reg/dropout_pretrain_LeNet5431K/'
-    dir_name = '/Users/aaron/Projects/Mphil_project/tmp_LeNet5_reg/dropouts/'
-    file_name = 'tmp5.pkl'
+    # dir_name = '/Users/aaron/Projects/Mphil_project/tmp_LeNet5_reg/dropouts/'
+    dir_name = parent_dir
+    file_name = f_name
     (weights, biases) = initialize_variables(PREV_EXIST, dir_name, file_name)
     # Construct model
     pred, pool, l1, l2= conv_network(x_image, weights, biases, keep_prob)

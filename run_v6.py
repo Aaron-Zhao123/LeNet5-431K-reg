@@ -1,5 +1,6 @@
 import os
 import training_l1
+import compute_lambda
 # os.system('python training_v3.py -p0')
 # os.system('python training_v3.py -p1')
 # os.system('python training_v3.py -p2')
@@ -42,10 +43,16 @@ dropout_rate = 1
 parent_dir = './weights/norm1/'
 
 # for shake_rate in shakeout_rate_list:
-for lnorm1 in shakeout_rate_list:
+for lnorm1 in lambda1_list:
     save_name = 'norm1'+'val'+str(0) +'.pkl'
     # save_name = 'tmp' + str(shakeout_rate_list.index(shake_rate) + 1) + '.pkl'
     # save_name = 'tmp' + '.pkl'
+    fetch_lambdas_params = [
+        ('-PREV_EXIST',1),
+        ('-parent_dir',parent_dir),
+        ('-file_name', save_name)
+    ]
+    l1, l2 = compute_lambda.main(fetch_lambdas_params)
     param = [
     ('-pcov',pcov),
     ('-pcov2',pcov2),
@@ -53,8 +60,8 @@ for lnorm1 in shakeout_rate_list:
     ('-pfc2',pfc2),
     ('-m',model_tag),
     ('-lr',lr),
-    ('-norm1',lnorm1),
-    ('-norm2',0),
+    ('-norm1',l1),
+    ('-norm2',l2),
     ('-dropout', 1.),
     ('-train',True),
     ('-weight_file_name', save_name),
