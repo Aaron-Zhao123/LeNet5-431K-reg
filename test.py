@@ -158,8 +158,8 @@ def main(argv = None):
 
     x_image = tf.reshape(x,[-1,28,28,1])
     # dir_name = '/Users/aaron/Projects/Mphil_project/tmp_LeNet5_reg/dropout_pretrain_LeNet5431K/'
-    dir_name = '/Users/aaron/Projects/Mphil_project/tmp_LeNet5_reg/shakeouts/'
-    file_name = 'tmp5.pkl'
+    dir_name = '/Users/aaron/Projects/Mphil_project/tmp_LeNet5_reg/norm1/'
+    file_name = 'tmp0.pkl'
     (weights, biases) = initialize_variables(dir_name, file_name)
     # Construct model
     pred, pool, l1, l2= conv_network(x_image, weights, biases, keep_prob)
@@ -174,9 +174,9 @@ def main(argv = None):
     merged = tf.merge_all_summaries()
     saver = tf.train.Saver()
     init = tf.initialize_all_variables()
-    print('dumping weights...')
-    save_file_name = '/Users/aaron/Projects/Mphil_project/tmp_LeNet5_reg/mat_file/shakeout5'
-    dump_weights(dir_name + file_name, save_file_name)
+    # print('dumping weights...')
+    # save_file_name = '/Users/aaron/Projects/Mphil_project/tmp_LeNet5_reg/mat_file/shakeout_prob5'
+    # dump_weights(dir_name + file_name, save_file_name)
     # Launch the graph
     with tf.Session() as sess:
         sess.run(init)

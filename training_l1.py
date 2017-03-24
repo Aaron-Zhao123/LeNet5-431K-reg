@@ -141,8 +141,9 @@ def conv_network(x, weights, biases, keep_prob, c = 10.):
     h1_fc = tf.nn.relu(tf.matmul(reshape, weights['fc1']) + biases['fc1'])
     l1_fc1 = tf.reduce_sum(tf.abs(weights['fc1']))
     l2_fc1 = tf.nn.l2_loss(weights['fc1'])
-    # h1_fc_drop  = tf.nn.dropout(h1_fc, keep_prob)
-    h1_fc_drop, prob, rj_hat, wj, rj, k_rate = shakeout(h1_fc, weights['fc1'], c, keep_prob)
+    h1_fc_drop  = tf.nn.dropout(h1_fc, keep_prob)
+    h1_fc_shake, prob, rj_hat, wj, rj, k_rate = shakeout(h1_fc, weights['fc1'], c, keep_prob)
+
     output = tf.matmul(h1_fc_drop, weights['fc2']) + biases['fc2']
     l1_fc2 = tf.reduce_sum(tf.abs(weights['fc2']))
     l2_fc2 = tf.nn.l2_loss(weights['fc2'])
