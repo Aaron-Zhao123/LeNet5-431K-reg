@@ -396,9 +396,9 @@ def main(argv = None):
         # Define loss and optimizer
         trainer = tf.train.AdamOptimizer(learning_rate=learning_rate)
         if (loss == 0):
-        	cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(pred, y))
+        	cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits = pred, labels = y))
         else:
-        	cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(pred, y)) + loss
+        	cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits = pred, labels = y)) + loss
 
         correct_prediction = tf.equal(tf.argmax(pred,1), tf.argmax(y,1))
         accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
