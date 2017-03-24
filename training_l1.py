@@ -50,7 +50,8 @@ ENABLE_PRUNING = 0
 #     if (first_time_training):
 def initialize_variables(model_number):
     # with open('weights_log_asyn/'+ model_number +'.pkl','rb') as f:
-    with open('norm1_start.pkl','rb') as f:
+    # with open('norm1_start.pkl','rb') as f:
+    with open(model_number,'rb') as f:
         wc1, wc2, wd1, out, bc1, bc2, bd1, bout = pickle.load(f)
     weights = {
         # 5x5 conv, 1 input, 32 outputs
@@ -382,7 +383,7 @@ def main(argv = None):
         keys = ['cov1','cov2','fc1','fc2']
 
         x_image = tf.reshape(x,[-1,28,28,1])
-        (weights, biases) = initialize_variables(model_number)
+        (weights, biases) = initialize_variables(parent_dir+weight_file_name)
         # Construct model
         pred, pool, l1, l2, hidden_before, hidden_after,  prob, rj_hat, wj, rj, k_rate= conv_network(x_image, weights, biases, keep_prob, shakeout_const)
         # lambda_1 = 0.00001
