@@ -50,7 +50,7 @@ for lnorm1 in lambda1_list:
     # save_name = 'tmp' + str(shakeout_rate_list.index(shake_rate) + 1) + '.pkl'
     # save_name = 'tmp' + '.pkl'
     fetch_lambdas_params = [
-        ('-PREV_EXIST',1),
+        ('-PREV_EXIST',0),
         ('-parent_dir',parent_dir),
         ('-file_name', save_name)
     ]

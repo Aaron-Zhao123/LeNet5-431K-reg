@@ -218,7 +218,7 @@ def main(argv = None):
         test_accuracy = accuracy.eval({x: mnist.test.images, y: mnist.test.labels, keep_prob : 1.0})
         print("Accuracy:", test_accuracy)
         print("L1 , L2 are {},{}".format(l1, l2))
-        with open('start.pkl','wb') as f:
+        with open(parent_dir + f_name,'wb') as f:
                 pickle.dump((weights['cov1'].eval(), weights['cov2'].eval(), weights['fc1'].eval(), weights['fc2'].eval(), biases['cov1'].eval(), biases['cov2'].eval(), biases['fc1'].eval(), biases['fc2'].eval()),f)
 
     return (l1,l2)
