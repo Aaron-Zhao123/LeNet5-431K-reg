@@ -194,8 +194,6 @@ def main(argv = None):
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
     cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits = pred, labels = y))
 
-    merged = tf.merge_all_summaries()
-    saver = tf.train.Saver()
     init = tf.initialize_all_variables()
     # Launch the graph
     with tf.Session() as sess:
