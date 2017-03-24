@@ -55,8 +55,8 @@ for lnorm1 in lambda1_list:
         ('-file_name', save_name)
     ]
     l1, l2 = compute_lambda.main(fetch_lambdas_params)
-    l1 = 1e-5
-    l2 = 1e-3
+    l1 = 1e-4
+    l2 = 1e-2
     l1 = 0
     l2 = 0
     print('picked l1 l2 to be {},{}'.format(l1,l2))
