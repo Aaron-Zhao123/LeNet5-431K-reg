@@ -403,8 +403,6 @@ def main(argv = None):
         correct_prediction = tf.equal(tf.argmax(pred,1), tf.argmax(y,1))
         accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
-        merged = tf.merge_all_summaries()
-        saver = tf.train.Saver()
 
         # I need to fetch this value
         variables = [weights['cov1'], weights['cov2'], weights['fc1'], weights['fc2'],
