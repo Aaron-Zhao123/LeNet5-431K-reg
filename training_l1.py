@@ -50,7 +50,7 @@ ENABLE_PRUNING = 0
 #     if (first_time_training):
 def initialize_variables(model_number):
     # with open('weights_log_asyn/'+ model_number +'.pkl','rb') as f:
-    with open('start.pkl','rb') as f:
+    with open('norm1_start.pkl','rb') as f:
         wc1, wc2, wd1, out, bc1, bc2, bd1, bout = pickle.load(f)
     weights = {
         # 5x5 conv, 1 input, 32 outputs
