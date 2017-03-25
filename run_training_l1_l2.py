@@ -54,7 +54,7 @@ while (count < 10):
     ('-dropout', 1.),
     ('-PRUNE',True),
     ('-TRAIN',False),
-    ('-parent_dir','./')
+    ('-parent_dir',parent_dir)
     ]
 
     _ = training_l1.main(param)
@@ -75,7 +75,7 @@ while (count < 10):
     ('-dropout', 1.),
     ('-PRUNE',False),
     ('-TRAIN',True),
-    ('-parent_dir','./')
+    ('-parent_dir',parent_dir)
     ]
     acc,iter_cnt = training_l1.main(param)
 
