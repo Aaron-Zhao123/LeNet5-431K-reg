@@ -205,13 +205,16 @@ def main(argv = None):
         for key in keys:
             num_weights = np.count_nonzero(weights[key].eval()) + num_weights
         print(num_weights, l1.eval(), l2.eval())
-        l1_min = 1e-7
-        l1_max = 1e-5
-        l2_min = 1e-4
-        l2_max = 1e-3
+        # l1_min = 1e-7
+        # l1_max = 1e-5
+        # l2_min = 1e-4
+        # l2_max = 1e-3
+        l1_base = 1e-7
+        l2_base = 1e-4
         print(num_weights / float(t_weights))
-        l1 = l1_min + num_weights / float(t_weights) * (l1_max - l1_min)
-        l2 = l2_min + num_weights / float(t_weights) * (l2_max - l2_min)
+        l1 =  num_weights / float(t_weights) * (l1_base)
+        # l2 = l2_min + num_weights / float(t_weights) * (l2_max - l2_min)
+        l2 =  num_weights / float(t_weights) * (l2_base)
 
         # Calculate accuracy
         accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))

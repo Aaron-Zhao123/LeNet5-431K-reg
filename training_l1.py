@@ -162,7 +162,7 @@ Prune weights, weights that has absolute value lower than the
 threshold is set to 0
 '''
 
-def prune_weights(pruning_cov, pruning_cov2, pruning_fc, pruning_fc2, weights, weight_mask, biases, biases_mask):
+def prune_weights(pruning_cov, pruning_cov2, pruning_fc, pruning_fc2, weights, weight_mask, biases, biases_mask, parent_dir, f_name):
     keys_cov = ['cov1','cov2','fc1','fc2']
     keys_fc = ['fc1', 'fc2']
     next_threshold = {}
@@ -198,7 +198,7 @@ def prune_weights(pruning_cov, pruning_cov2, pruning_fc, pruning_fc2, weights, w
             weight_mask[key] = np.abs(weight) > next_threshold[key]
             b_threshold[key] = np.percentile(np.abs(biase),pruning_fc2)
             biases_mask[key] = np.abs(biase) > b_threshold[key]
-    with open('mask.pkl', 'wb') as f:
+    with open(parent_dir + 'masks/' + f_name, 'wb') as f:
         pickle.dump((weight_mask, biases_mask), f)
 
 # def quantize_a_value(val):
@@ -220,10 +220,10 @@ def mask_gradients(weights, grads_and_names, weight_masks, biases, biases_mask):
                 mask = weight_masks[key]
                 new_grads.append((tf.multiply(tf.constant(mask, dtype = tf.float32),grad),var_name))
                 flag = 1
-            if (biases[key] == var_name):
-                mask = biases_mask[key]
-                new_grads.append((tf.multiply(tf.constant(mask, dtype = tf.float32),grad),var_name))
-                flag = 1
+            # if (biases[key] == var_name):
+            #     mask = biases_mask[key]
+            #     new_grads.append((tf.multiply(tf.constant(mask, dtype = tf.float32),grad),var_name))
+            #     flag = 1
         # if flag is not set
         if (flag == 0):
             new_grads.append((grad,var_name))
@@ -299,8 +299,6 @@ def main(argv = None):
             learning_rate = 1e-4
             dropout = 1
             shakeout_const = 10.
-            # lambda_1 = 0.00001
-            # lambda_2 = 0.0005
             weight_file_name = 'tmp'
             for item in opts:
                 print (item)
@@ -316,8 +314,6 @@ def main(argv = None):
                     pruning_fc2 = val
                 if (opt == '-m'):
                     model_number = val
-                if (opt == '-ponly'):
-                    PRUNE_ONLY = val
                 if (opt == '-train'):
                     TRAIN = val
                 if (opt == '-lr'):
@@ -334,6 +330,10 @@ def main(argv = None):
                     shakeout_const = val
                 if (opt == '-parent_dir'):
                     parent_dir = val
+                if (opt == '-PRUNE'):
+                    PRUNE_ONLY = val
+                if (opt == '-TRAIN'):
+                    TRAIN = val
             print('pruning percentage for cov and fc are {},{}'.format(pruning_cov, pruning_fc))
             print('Train values:',TRAIN)
         except getopt.error, msg:
@@ -491,8 +491,7 @@ def main(argv = None):
                                     keep_prob: 1.})
                             print('test accuracy is {}'.format(test_accuracy))
                             if (epoch > 300 or test_accuracy > 0.990):
-                            # if (epoch > 300):
-                                file_name = parent_dir + weight_file_name
+                                file_name = parent_dir + 'weights/' + weight_file_name
                                 with open(file_name, 'wb') as f:
                                     pickle.dump((
                                         weights['cov1'].eval(),
@@ -503,7 +502,16 @@ def main(argv = None):
                                         biases['cov2'].eval(),
                                         biases['fc1'].eval(),
                                         biases['fc2'].eval()),f)
-                                prune_weights(pruning_cov, pruning_cov2, pruning_fc, pruning_fc2, weights, weights_mask, biases, biases_mask)
+                                prune_weights(  pruning_cov,
+                                                pruning_cov2,
+                                                pruning_fc,
+                                                pruning_fc2,
+                                                weights,
+                                                weights_mask,
+                                                biases,
+                                                biases_mask,
+                                                parent_dir,
+                                                weight_file_name)
                                 mask_info(weights_mask)
                                 return test_accuracy
                             else:

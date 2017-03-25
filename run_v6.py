@@ -2,13 +2,6 @@ import os
 import training_l1
 import compute_lambda
 import sys
-# os.system('python training_v3.py -p0')
-# os.system('python training_v3.py -p1')
-# os.system('python training_v3.py -p2')
-# os.system('python training_v3.py -p3')
-# os.system('python training_v3.py -p4')
-# os.system('python training_v3.py -p4')
-# os.system('python training_v3.py -p5')
 
 acc_list = []
 count = 0
