@@ -206,6 +206,7 @@ def prune_weights(pruning_cov, pruning_cov2, pruning_fc, pruning_fc2, weights, w
             weight_mask[key] = np.abs(weight) > next_threshold[key]
             b_threshold[key] = np.percentile(np.abs(biase),pruning_fc2)
             biases_mask[key] = np.abs(biase) > b_threshold[key]
+    print(pf_name)
     pf_name = compute_file_name([pruning_cov, pruning_cov2], [pruning_fc, pruning_fc2])
     file_name = parent_dir + 'weights/' + pf_name
 
