@@ -467,6 +467,7 @@ def main(argv = None):
             accuracy_mean = 0
             c = 0
             train_accuracy = 0
+            iter_cnt = 0
 
             if (TRAIN == True):
                 print('Training starts ...')
@@ -475,6 +476,7 @@ def main(argv = None):
                     total_batch = int(mnist.train.num_examples/batch_size)
                     # Loop over all batches
                     for i in range(total_batch):
+                        iter_cnt = iter_cnt + 1
                         # execute a pruning
                         batch_x, batch_y = mnist.train.next_batch(batch_size)
                         [_, cost_val, l1, l2, hb, ha,  prob_val, rj_hat_val, wj_val, rj_val, k_val] = sess.run([train_step, cost, l1_norm, l2_norm, hidden_before, hidden_after,  prob, rj_hat, wj, rj, k_rate], feed_dict = {
@@ -527,7 +529,7 @@ def main(argv = None):
                                         biases['fc2'].eval()),f)
 
                                 mask_info(weights_mask)
-                                return test_accuracy
+                                return (test_accuracy, iter_cnt)
                             else:
                                 pass
                         with open('log/data.txt',"a") as output_file:
@@ -539,26 +541,24 @@ def main(argv = None):
                 print("Optimization Finished!")
                 # Test model
                 correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
-            if (TRAIN == False):
-                if (PRUNE_ONLY == True):
-                    print('hi in pruning')
-                    prune_weights(  pruning_cov,
-                                    pruning_cov2,
-                                    pruning_fc,
-                                    pruning_fc2,
-                                    weights,
-                                    weights_mask,
-                                    biases,
-                                    biases_mask,
-                                    parent_dir,
-                                    weight_file_name)
-                    mask_info(weights_mask)
-                # Calculate accuracy
-                accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
-                test_accuracy = accuracy.eval({x: mnist.test.images, y: mnist.test.labels, keep_prob : 1.0})
-                print("Accuracy:", test_accuracy)
-                with open('acc_log_10.txt','a') as f:
-                    f.write(str(test_accuracy)+'\n')
+            if (PRUNE_ONLY == True):
+                print('hi in pruning')
+                prune_weights(  pruning_cov,
+                                pruning_cov2,
+                                pruning_fc,
+                                pruning_fc2,
+                                weights,
+                                weights_mask,
+                                biases,
+                                biases_mask,
+                                parent_dir,
+                                weight_file_name)
+                mask_info(weights_mask)
+            # Calculate accuracy
+            accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
+            test_accuracy = accuracy.eval({x: mnist.test.images, y: mnist.test.labels, keep_prob : 1.0})
+            print("Accuracy:", test_accuracy)
+            return (test_accuracy, iter_cnt)
     except Usage, err:
         print >> sys.stderr, err.msg
         print >> sys.stderr, "for help use --help"
