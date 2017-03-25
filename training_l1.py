@@ -208,7 +208,7 @@ def prune_weights(pruning_cov, pruning_cov2, pruning_fc, pruning_fc2, weights, w
             biases_mask[key] = np.abs(biase) > b_threshold[key]
     pf_name = compute_file_name([pruning_cov, pruning_cov2], [pruning_fc, pruning_fc2])
     print(pf_name)
-    file_name = parent_dir + 'weights/' + pf_name
+    file_name = parent_dir + 'weights/' + pf_name + '.pkl'
 
     with open(file_name, 'wb') as f:
         pickle.dump((
@@ -221,7 +221,7 @@ def prune_weights(pruning_cov, pruning_cov2, pruning_fc, pruning_fc2, weights, w
             biases['fc1'].eval(),
             biases['fc2'].eval()),f)
 
-    with open(parent_dir + 'masks/' + pf_name, 'wb') as f:
+    with open(parent_dir + 'masks/' + pf_name + '.pkl', 'wb') as f:
         pickle.dump((weight_mask, biases_mask), f)
 
 # def quantize_a_value(val):
