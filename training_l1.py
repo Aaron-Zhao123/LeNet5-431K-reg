@@ -44,6 +44,13 @@ prune_threshold_fc = 1
 prune_freq = 100
 ENABLE_PRUNING = 0
 
+def compute_file_name(pcov, pfc):
+    name = ''
+    name += 'cov' + str(int(pcov[0] * 10))
+    name += 'cov' + str(int(pcov[1] * 10))
+    name += 'fc' + str(int(pfc[0] * 10))
+    name += 'fc' + str(int(pfc[1] * 10))
+    return name
 
 # Store layers weight & bias
 # def initialize_tf_variables(first_time_training):
@@ -199,7 +206,21 @@ def prune_weights(pruning_cov, pruning_cov2, pruning_fc, pruning_fc2, weights, w
             weight_mask[key] = np.abs(weight) > next_threshold[key]
             b_threshold[key] = np.percentile(np.abs(biase),pruning_fc2)
             biases_mask[key] = np.abs(biase) > b_threshold[key]
-    with open(parent_dir + 'masks/' + f_name, 'wb') as f:
+    pf_name = compute_file_name([pruning_cov, pruning_cov2], [pruning_fc, pruning_fc2])
+    file_name = parent_dir + 'weights/' + pf_name
+
+    with open(file_name, 'wb') as f:
+        pickle.dump((
+            weights['cov1'].eval(),
+            weights['cov2'].eval(),
+            weights['fc1'].eval(),
+            weights['fc2'].eval(),
+            biases['cov1'].eval(),
+            biases['cov2'].eval(),
+            biases['fc1'].eval(),
+            biases['fc2'].eval()),f)
+
+    with open(parent_dir + 'masks/' + pf_name, 'wb') as f:
         pickle.dump((weight_mask, biases_mask), f)
 
 # def quantize_a_value(val):
