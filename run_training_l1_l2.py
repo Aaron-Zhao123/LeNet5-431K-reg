@@ -79,13 +79,13 @@ while (count < 10):
     ]
     acc,iter_cnt = training_l1.main(param)
 
-    if (acc < 0.9936):
+    if (acc < 0.99):
         retrain += 1
         lr = lr / float(2)
         if (retrain > 3):
             print("lowest precision")
             acc_list.append('{},{},{}\n'.format(
-                pcov + pfc,
+                pcov[:] + pfc[:],
                 acc,
                 iter_cnt
             ))
@@ -93,12 +93,13 @@ while (count < 10):
             # pcov[0] = pcov[0] + 10.
     else:
         acc_list.append('{},{},{}\n'.format(
-            pcov + pfc,
+            pcov[:] + pfc[:],
             acc,
             iter_cnt
         ))
-        pfc[1] = pfc[1] + 10.
-        pcov[0] = pcov[0] + 10.
+        pfc[0] = pfc[0] + 10.
+        # pfc[1] = pfc[1] + 10.
+        # pcov[0] = pcov[0] + 10.
         count = count + 1
         if (retrain != 0):
             retrain = 0
