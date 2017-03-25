@@ -206,8 +206,8 @@ def prune_weights(pruning_cov, pruning_cov2, pruning_fc, pruning_fc2, weights, w
             weight_mask[key] = np.abs(weight) > next_threshold[key]
             b_threshold[key] = np.percentile(np.abs(biase),pruning_fc2)
             biases_mask[key] = np.abs(biase) > b_threshold[key]
-    print(pf_name)
     pf_name = compute_file_name([pruning_cov, pruning_cov2], [pruning_fc, pruning_fc2])
+    print(pf_name)
     file_name = parent_dir + 'weights/' + pf_name
 
     with open(file_name, 'wb') as f:
@@ -541,6 +541,7 @@ def main(argv = None):
                 correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
             if (TRAIN == False):
                 if (PRUNE_ONLY == True):
+                    print('hi in pruning')
                     prune_weights(  pruning_cov,
                                     pruning_cov2,
                                     pruning_fc,
