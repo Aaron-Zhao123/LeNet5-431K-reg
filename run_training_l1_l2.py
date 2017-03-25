@@ -79,7 +79,7 @@ while (count < 10):
     ]
     acc,iter_cnt = training_l1.main(param)
 
-    if (acc < 0.99):
+    if (acc < 0.98710):
         retrain += 1
         lr = lr / float(2)
         if (retrain > 3):
