@@ -51,6 +51,7 @@ ENABLE_PRUNING = 0
 def initialize_variables(model_number):
     # with open('weights_log_asyn/'+ model_number +'.pkl','rb') as f:
     # with open('norm1_start.pkl','rb') as f:
+    print(model_number)
     with open(model_number,'rb') as f:
         wc1, wc2, wd1, out, bc1, bc2, bd1, bout = pickle.load(f)
     weights = {
