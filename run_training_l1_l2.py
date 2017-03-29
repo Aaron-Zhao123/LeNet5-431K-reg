@@ -90,6 +90,8 @@ while (count < 10):
                 iter_cnt
             ))
             pfc[0] = pfc[0] + 10.
+            if (pfc[0] == 100):
+                break
             # pcov[0] = pcov[0] + 10.
     else:
         acc_list.append('{},{},{}\n'.format(
