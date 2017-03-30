@@ -18,7 +18,8 @@ class Usage(Exception):
         self.msg = msg
 
 # Parameters
-training_epochs = 500
+# training_epochs = 500
+training_epochs = 1
 batch_size = 128
 display_step = 1
 
