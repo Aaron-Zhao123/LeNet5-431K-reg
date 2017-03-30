@@ -89,6 +89,9 @@ while (count < 10):
                 acc,
                 iter_cnt
             ))
+            with open("hist.txt","w") as f:
+                for item in acc_list:
+                    f.write(item)
             pfc[0] = pfc[0] + 10.
             if (pfc[0] == 100):
                 break
@@ -99,7 +102,12 @@ while (count < 10):
             acc,
             iter_cnt
         ))
+        with open("hist.txt","w") as f:
+            for item in acc_list:
+                f.write(item)
         pfc[0] = pfc[0] + 10.
+        if (pfc[0] > 100):
+            break
         # pfc[1] = pfc[1] + 10.
         # pcov[0] = pcov[0] + 10.
         count = count + 1
