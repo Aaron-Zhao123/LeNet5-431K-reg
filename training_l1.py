@@ -485,7 +485,7 @@ def main(argv = None):
                                 y: batch_y,
                                 keep_prob: dropout})
                         training_cnt = training_cnt + 1
-                        if (training_cnt % 10 == 0):
+                        if (training_cnt % 100 == 0):
                             print("The cost value is {} and norm value is {},{}".format(cost_val, l1, l2))
                             [c, train_accuracy] = sess.run([cost, accuracy], feed_dict = {
                                 x: batch_x,
