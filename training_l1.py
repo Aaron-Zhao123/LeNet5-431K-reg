@@ -366,7 +366,7 @@ def main(argv = None):
         # obtain all weight masks
         pruning_cov = int(pruning_cov)
         pruning_cov2 = int(pruning_cov2)
-        pruning_fc = int(pruning_fc)
+        pruning_fc = pruning_fc
         pruning_fc2 = int(pruning_fc2)
 
         if (TRAIN == True):
@@ -487,13 +487,6 @@ def main(argv = None):
                         training_cnt = training_cnt + 1
                         if (training_cnt % 10 == 0):
                             print("The cost value is {} and norm value is {},{}".format(cost_val, l1, l2))
-                            # hb = hb.flatten()
-                            # ha = ha.flatten()
-                            # print("Test shakeout: before is \n {} \n and after is \n{}".format(hb[0:20], ha[0:20]))
-                            # print(prob_val.flatten()[0:20])
-                            # print(rj_val.flatten()[0:20])
-                            # print(rj_hat_val.flatten()[0:20])
-                            # print(k_val)
                             [c, train_accuracy] = sess.run([cost, accuracy], feed_dict = {
                                 x: batch_x,
                                 y: batch_y,

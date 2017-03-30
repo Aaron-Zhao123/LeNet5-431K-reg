@@ -26,7 +26,7 @@ pfc = [99., 0.]
 retrain = 0
 lr = 1e-4
 f_name = compute_file_name(pcov,pfc)
-pfc[0] = pfc[0]
+pfc[0] = pfc[0] + 0.1
 
 while (count < 10):
     if (retrain == 0):
