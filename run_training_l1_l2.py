@@ -20,16 +20,16 @@ def compute_file_name(pcov, pfc):
 
 acc_list = []
 count = 0
-pcov = [0., 80.]
-pfc = [99.4, 0.]
+pcov = [0., 0.]
+pfc = [0, 0.]
 
 retrain = 0
 lr = 1e-4
 f_name = compute_file_name(pcov,pfc)
-# pfc[0] = pfc[0] + 0.1
+pfc[0] = pfc[0] + 10.
 # pcov[1] = pcov[1] + 10
-pcov[0] = pcov[0] + 10
-pfc[1] = pfc[1] + 10
+# pcov[0] = pcov[0] + 10
+# pfc[1] = pfc[1] + 10
 
 while (count < 10):
     if (retrain == 0):
@@ -95,10 +95,10 @@ while (count < 10):
             with open("hist.txt","w") as f:
                 for item in acc_list:
                     f.write(item)
-            # pfc[0] = pfc[0] + 0.1
+            pfc[0] = pfc[0] + 10.
             # pcov[1] = pcov[1] + 10
-            pcov[0] = pcov[0] + 10
-            pfc[1] = pfc[1] + 10
+            # pcov[0] = pcov[0] + 10
+            # pfc[1] = pfc[1] + 10
             if (pfc[0] == 100):
                 break
             # pcov[0] = pcov[0] + 10.
@@ -111,10 +111,10 @@ while (count < 10):
         with open("hist.txt","w") as f:
             for item in acc_list:
                 f.write(item)
-        # pfc[0] = pfc[0] + 0.1
+        pfc[0] = pfc[0] + 10.
         # pcov[1] = pcov[1] + 10
-        pcov[0] = pcov[0] + 10
-        pfc[1] = pfc[1] + 10
+        # pcov[0] = pcov[0] + 10
+        # pfc[1] = pfc[1] + 10
         if (pfc[0] == 100):
             break
         # pfc[1] = pfc[1] + 10.
