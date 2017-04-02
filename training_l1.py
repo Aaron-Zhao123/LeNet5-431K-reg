@@ -368,20 +368,20 @@ def main(argv = None):
         pruning_fc2 = int(pruning_fc2)
 
         if (TRAIN == True):
-            # weights_mask = {
-            #     'cov1': np.ones([5, 5, NUM_CHANNELS, 20]),
-            #     'cov2': np.ones([5, 5, 20, 50]),
-            #     'fc1': np.ones([4 * 4 * 50, 500]),
-            #     'fc2': np.ones([500, NUM_LABELS])
-            # }
-            # biases_mask = {
-            #     'cov1': np.ones([20]),
-            #     'cov2': np.ones([50]),
-            #     'fc1': np.ones([500]),
-            #     'fc2': np.ones([10])
-            # }
-            with open(parent_dir + 'masks/' + weight_file_name,'rb') as f:
-                (weights_mask,biases_mask) = pickle.load(f)
+            weights_mask = {
+                'cov1': np.ones([5, 5, NUM_CHANNELS, 20]),
+                'cov2': np.ones([5, 5, 20, 50]),
+                'fc1': np.ones([4 * 4 * 50, 500]),
+                'fc2': np.ones([500, NUM_LABELS])
+            }
+            biases_mask = {
+                'cov1': np.ones([20]),
+                'cov2': np.ones([50]),
+                'fc1': np.ones([500]),
+                'fc2': np.ones([10])
+            }
+            # with open(parent_dir + 'masks/' + weight_file_name,'rb') as f:
+            #     (weights_mask,biases_mask) = pickle.load(f)
         else:
             weights_mask = {
                 'cov1': np.ones([5, 5, NUM_CHANNELS, 20]),
