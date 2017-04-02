@@ -83,18 +83,18 @@ def initialize_variables(model_number):
     #     'fc1': tf.Variable(tf.truncated_normal([ 4 * 4 * 50, 500])),
     #     'fc2': tf.Variable(tf.truncated_normal([500, 10]))
     # }
-    weights = {
-        'cov1': tf.Variable(tf.truncated_normal([5, 5, NUM_CHANNELS, 20], stddev=0.1)),
-        'cov2': tf.Variable(tf.truncated_normal([5, 5, 20, 50], stddev=0.1)),
-        'fc1': tf.Variable(tf.truncated_normal([ 4 * 4 * 50, 500])),
-        'fc2': tf.Variable(tf.truncated_normal([500, 10]))
-    }
-    biases = {
-        'cov1': tf.Variable(tf.random_normal([20])),
-        'cov2': tf.Variable(tf.random_normal([50])),
-        'fc1': tf.Variable(tf.random_normal([500])),
-        'fc2': tf.Variable(tf.random_normal([10]))
-    }
+        weights = {
+            'cov1': tf.Variable(tf.truncated_normal([5, 5, NUM_CHANNELS, 20], stddev=0.1)),
+            'cov2': tf.Variable(tf.truncated_normal([5, 5, 20, 50], stddev=0.1)),
+            'fc1': tf.Variable(tf.truncated_normal([ 4 * 4 * 50, 500])),
+            'fc2': tf.Variable(tf.truncated_normal([500, 10]))
+        }
+        biases = {
+            'cov1': tf.Variable(tf.random_normal([20])),
+            'cov2': tf.Variable(tf.random_normal([50])),
+            'fc1': tf.Variable(tf.random_normal([500])),
+            'fc2': tf.Variable(tf.random_normal([10]))
+        }
     return (weights, biases)
 #store the masks
 # weights_mask = {
@@ -497,7 +497,7 @@ def main(argv = None):
                                 print('Epoch is {}'.format(epoch))
                                 weights_info(training_cnt, c, train_accuracy, accuracy_mean)
                         # if (training_cnt == 10):
-                        if (accuracy_mean > 0.985 or epoch > 300):
+                        if (accuracy_mean > 0.985 or epoch > 500):
                         # if (epoch > 300):
                             accuracy_list = np.zeros(200)
                             accuracy_mean = 0
@@ -507,7 +507,7 @@ def main(argv = None):
                                     y: mnist.test.labels[:],
                                     keep_prob: 1.})
                             print('test accuracy is {}'.format(test_accuracy))
-                            if (epoch > 300 or test_accuracy > 0.990):
+                            if (epoch > 500 or test_accuracy > 0.990):
                                 file_name = parent_dir + 'weights/' + weight_file_name
                                 with open(file_name, 'wb') as f:
                                     pickle.dump((
