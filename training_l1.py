@@ -360,20 +360,20 @@ def main(argv = None):
         pruning_fc2 = int(pruning_fc2)
 
         if (TRAIN == True):
-            weights_mask = {
-                'cov1': np.ones([5, 5, NUM_CHANNELS, 20]),
-                'cov2': np.ones([5, 5, 20, 50]),
-                'fc1': np.ones([4 * 4 * 50, 500]),
-                'fc2': np.ones([500, NUM_LABELS])
-            }
-            biases_mask = {
-                'cov1': np.ones([20]),
-                'cov2': np.ones([50]),
-                'fc1': np.ones([500]),
-                'fc2': np.ones([10])
-            }
-            # with open(parent_dir + 'masks/' + weight_file_name,'rb') as f:
-            #     (weights_mask,biases_mask) = pickle.load(f)
+            # weights_mask = {
+            #     'cov1': np.ones([5, 5, NUM_CHANNELS, 20]),
+            #     'cov2': np.ones([5, 5, 20, 50]),
+            #     'fc1': np.ones([4 * 4 * 50, 500]),
+            #     'fc2': np.ones([500, NUM_LABELS])
+            # }
+            # biases_mask = {
+            #     'cov1': np.ones([20]),
+            #     'cov2': np.ones([50]),
+            #     'fc1': np.ones([500]),
+            #     'fc2': np.ones([10])
+            # }
+            with open(parent_dir + 'masks/' + weight_file_name,'rb') as f:
+                (weights_mask,biases_mask) = pickle.load(f)
         else:
             weights_mask = {
                 'cov1': np.ones([5, 5, NUM_CHANNELS, 20]),
@@ -454,7 +454,7 @@ def main(argv = None):
             training_cnt = 0
             pruning_cnt = 0
             train_accuracy = 0
-            accuracy_list = np.zeros(200)
+            accuracy_list = np.zeros(20)
             accuracy_mean = 0
             c = 0
             train_accuracy = 0
@@ -475,23 +475,24 @@ def main(argv = None):
                                 y: batch_y,
                                 keep_prob: dropout})
                         training_cnt = training_cnt + 1
-                        if (training_cnt % 100 == 0):
-                            print("The cost value is {} and norm value is {},{}".format(cost_val, l1, l2))
+                        if (training_cnt % 1000 == 0):
+                            # print("The cost value is {} and norm value is {},{}".format(cost_val, l1, l2))
                             [c, train_accuracy] = sess.run([cost, accuracy], feed_dict = {
                                 x: batch_x,
                                 y: batch_y,
                                 keep_prob: 1.})
-                            accuracy_list = np.concatenate((np.array([train_accuracy]),accuracy_list[0:199]))
+                            accuracy_list = np.concatenate((np.array([train_accuracy]),accuracy_list[0:19]))
                             accuracy_mean = np.mean(accuracy_list)
-                            if (training_cnt % 100 == 0):
-                                print('dropout is {}'.format(dropout))
-                                print('accuracy mean is {}'.format(accuracy_mean))
-                                print('Epoch is {}'.format(epoch))
-                                weights_info(training_cnt, c, train_accuracy, accuracy_mean)
+                            # if (training_cnt % 100 == 0):
+                            #     print('dropout is {}'.format(dropout))
+                            #     print('accuracy mean is {}'.format(accuracy_mean))
+                            #     print('Epoch is {}'.format(epoch))
+                            weights_info(training_cnt, c, train_accuracy, accuracy_mean)
+                            mask_info(weights_mask)
                         # if (training_cnt == 10):
-                        if (accuracy_mean > 0.985 or epoch > 400):
+                        if (accuracy_mean > 0.985 or epoch > 300):
                         # if (epoch > 300):
-                            accuracy_list = np.zeros(200)
+                            accuracy_list = np.zeros(20)
                             accuracy_mean = 0
                             print('Training ends')
                             test_accuracy = accuracy.eval({
@@ -499,7 +500,7 @@ def main(argv = None):
                                     y: mnist.test.labels[:],
                                     keep_prob: 1.})
                             print('test accuracy is {}'.format(test_accuracy))
-                            if (epoch > 400 or test_accuracy > 0.990):
+                            if (epoch > 300 or test_accuracy > 0.990):
                                 print('saving pkl...')
                                 file_name = parent_dir + 'weights/' + weight_file_name
                                 print(file_name)
