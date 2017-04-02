@@ -57,44 +57,44 @@ def compute_file_name(pcov, pfc):
 # def initialize_tf_variables(first_time_training):
 #     if (first_time_training):
 def initialize_variables(model_number):
-    print(model_number)
-    with open(model_number,'rb') as f:
-        wc1, wc2, wd1, out, bc1, bc2, bd1, bout = pickle.load(f)
-    weights = {
-        # 5x5 conv, 1 input, 32 outputs
-        'cov1': tf.Variable(wc1),
-        # 5x5 conv, 32 inputs, 64 outputs
-        'cov2': tf.Variable(wc2),
-        # fully connected, 7*7*64 inputs, 1024 outputs
-        'fc1': tf.Variable(wd1),
-        # 1024 inputs, 10 outputs (class prediction)
-        'fc2': tf.Variable(out)
-    }
-
-    biases = {
-        'cov1': tf.Variable(bc1),
-        'cov2': tf.Variable(bc2),
-        'fc1': tf.Variable(bd1),
-        'fc2': tf.Variable(bout)
-    }
-    weights = {
-        'cov1': tf.Variable(tf.truncated_normal([5, 5, NUM_CHANNELS, 20], stddev=0.1)),
-        'cov2': tf.Variable(tf.truncated_normal([5, 5, 20, 50], stddev=0.1)),
-        'fc1': tf.Variable(tf.truncated_normal([ 4 * 4 * 50, 500])),
-        'fc2': tf.Variable(tf.truncated_normal([500, 10]))
-    }
+    # print(model_number)
+    # with open(model_number,'rb') as f:
+    #     wc1, wc2, wd1, out, bc1, bc2, bd1, bout = pickle.load(f)
+    # weights = {
+    #     # 5x5 conv, 1 input, 32 outputs
+    #     'cov1': tf.Variable(wc1),
+    #     # 5x5 conv, 32 inputs, 64 outputs
+    #     'cov2': tf.Variable(wc2),
+    #     # fully connected, 7*7*64 inputs, 1024 outputs
+    #     'fc1': tf.Variable(wd1),
+    #     # 1024 inputs, 10 outputs (class prediction)
+    #     'fc2': tf.Variable(out)
+    # }
+    #
+    # biases = {
+    #     'cov1': tf.Variable(bc1),
+    #     'cov2': tf.Variable(bc2),
+    #     'fc1': tf.Variable(bd1),
+    #     'fc2': tf.Variable(bout)
+    # }
     # weights = {
     #     'cov1': tf.Variable(tf.truncated_normal([5, 5, NUM_CHANNELS, 20], stddev=0.1)),
     #     'cov2': tf.Variable(tf.truncated_normal([5, 5, 20, 50], stddev=0.1)),
     #     'fc1': tf.Variable(tf.truncated_normal([ 4 * 4 * 50, 500])),
     #     'fc2': tf.Variable(tf.truncated_normal([500, 10]))
     # }
-    # biases = {
-    #     'cov1': tf.Variable(tf.random_normal([20])),
-    #     'cov2': tf.Variable(tf.random_normal([50])),
-    #     'fc1': tf.Variable(tf.random_normal([500])),
-    #     'fc2': tf.Variable(tf.random_normal([10]))
-    # }
+    weights = {
+        'cov1': tf.Variable(tf.truncated_normal([5, 5, NUM_CHANNELS, 20], stddev=0.1)),
+        'cov2': tf.Variable(tf.truncated_normal([5, 5, 20, 50], stddev=0.1)),
+        'fc1': tf.Variable(tf.truncated_normal([ 4 * 4 * 50, 500])),
+        'fc2': tf.Variable(tf.truncated_normal([500, 10]))
+    }
+    biases = {
+        'cov1': tf.Variable(tf.random_normal([20])),
+        'cov2': tf.Variable(tf.random_normal([50])),
+        'fc1': tf.Variable(tf.random_normal([500])),
+        'fc2': tf.Variable(tf.random_normal([10]))
+    }
     return (weights, biases)
 #store the masks
 # weights_mask = {
@@ -497,7 +497,7 @@ def main(argv = None):
                                 print('Epoch is {}'.format(epoch))
                                 weights_info(training_cnt, c, train_accuracy, accuracy_mean)
                         # if (training_cnt == 10):
-                        if (accuracy_mean > 0.985 or epoch > 500):
+                        if (accuracy_mean > 0.985 or epoch > 5):
                         # if (epoch > 300):
                             accuracy_list = np.zeros(200)
                             accuracy_mean = 0
@@ -507,8 +507,10 @@ def main(argv = None):
                                     y: mnist.test.labels[:],
                                     keep_prob: 1.})
                             print('test accuracy is {}'.format(test_accuracy))
-                            if (epoch > 500 or test_accuracy > 0.990):
+                            if (epoch > 5 or test_accuracy > 0.990):
+                                print('saving pkl...')
                                 file_name = parent_dir + 'weights/' + weight_file_name
+                                print(file_name)
                                 with open(file_name, 'wb') as f:
                                     pickle.dump((
                                         weights['cov1'].eval(),
