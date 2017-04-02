@@ -497,7 +497,7 @@ def main(argv = None):
                                 print('Epoch is {}'.format(epoch))
                                 weights_info(training_cnt, c, train_accuracy, accuracy_mean)
                         # if (training_cnt == 10):
-                        if (accuracy_mean > 0.985 or epoch > 5):
+                        if (accuracy_mean > 0.985 or epoch > 400):
                         # if (epoch > 300):
                             accuracy_list = np.zeros(200)
                             accuracy_mean = 0
@@ -507,7 +507,7 @@ def main(argv = None):
                                     y: mnist.test.labels[:],
                                     keep_prob: 1.})
                             print('test accuracy is {}'.format(test_accuracy))
-                            if (epoch > 5 or test_accuracy > 0.990):
+                            if (epoch > 400 or test_accuracy > 0.990):
                                 print('saving pkl...')
                                 file_name = parent_dir + 'weights/' + weight_file_name
                                 print(file_name)
