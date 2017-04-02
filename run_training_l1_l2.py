@@ -41,6 +41,8 @@ while (count < 10):
         ('-file_name', f_name + '.pkl')
     ]
     l1, l2 = compute_lambda.main(fetch_lambdas_params)
+    l1 = 0.
+    l2 = 0.
 
     # prune
     param = [
@@ -82,7 +84,8 @@ while (count < 10):
     ]
     acc,iter_cnt = training_l1.main(param)
 
-    if (acc < 0.98710):
+    # if (acc < 0.98710):
+    if (acc < 0.9658):
         retrain += 1
         lr = lr / float(2)
         if (retrain > 3):
