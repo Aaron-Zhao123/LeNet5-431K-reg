@@ -83,18 +83,18 @@ def initialize_variables(model_number):
     #     'fc1': tf.Variable(tf.truncated_normal([ 4 * 4 * 50, 500])),
     #     'fc2': tf.Variable(tf.truncated_normal([500, 10]))
     # }
-        weights = {
-            'cov1': tf.Variable(tf.truncated_normal([5, 5, NUM_CHANNELS, 20], stddev=0.1)),
-            'cov2': tf.Variable(tf.truncated_normal([5, 5, 20, 50], stddev=0.1)),
-            'fc1': tf.Variable(tf.truncated_normal([ 4 * 4 * 50, 500])),
-            'fc2': tf.Variable(tf.truncated_normal([500, 10]))
-        }
-        biases = {
-            'cov1': tf.Variable(tf.random_normal([20])),
-            'cov2': tf.Variable(tf.random_normal([50])),
-            'fc1': tf.Variable(tf.random_normal([500])),
-            'fc2': tf.Variable(tf.random_normal([10]))
-        }
+    weights = {
+        'cov1': tf.Variable(tf.truncated_normal([5, 5, NUM_CHANNELS, 20], stddev=0.1)),
+        'cov2': tf.Variable(tf.truncated_normal([5, 5, 20, 50], stddev=0.1)),
+        'fc1': tf.Variable(tf.truncated_normal([ 4 * 4 * 50, 500])),
+        'fc2': tf.Variable(tf.truncated_normal([500, 10]))
+    }
+    biases = {
+        'cov1': tf.Variable(tf.random_normal([20])),
+        'cov2': tf.Variable(tf.random_normal([50])),
+        'fc1': tf.Variable(tf.random_normal([500])),
+        'fc2': tf.Variable(tf.random_normal([10]))
+    }
     return (weights, biases)
 #store the masks
 # weights_mask = {
