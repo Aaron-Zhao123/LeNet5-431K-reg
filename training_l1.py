@@ -201,6 +201,7 @@ def prune_weights(pruning_cov, pruning_cov2, pruning_fc, pruning_fc2, weights, w
             biases_mask[key] = np.abs(biase) > b_threshold[key]
     pf_name = compute_file_name([pruning_cov, pruning_cov2], [pruning_fc, pruning_fc2])
     print(pf_name)
+    sys.exit()
     file_name = parent_dir + 'weights/' + pf_name + '.pkl'
 
     with open(file_name, 'wb') as f:

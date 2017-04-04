@@ -40,9 +40,9 @@ while (count < 10):
         ('-parent_dir',parent_dir),
         ('-file_name', f_name + '.pkl')
     ]
-    l1, l2 = compute_lambda.main(fetch_lambdas_params)
-    l1 = 0.
-    l2 = 0.
+    # l1, l2 = compute_lambda.main(fetch_lambdas_params)
+    # l1 = 0.
+    # l2 = 0.
     l1 = 1e-7
     l2 = 1e-4
     # prune
