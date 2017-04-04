@@ -27,7 +27,7 @@ retrain = 0
 lr = 1e-4
 f_name = compute_file_name(pcov,pfc)
 # pfc[0] = pfc[0] + 10.
-pfc[0] = pfc[0] + 1.
+pfc[0] = pfc[0] + 0.1
 # pcov[1] = pcov[1] + 10
 # pcov[0] = pcov[0] + 10
 # pfc[1] = pfc[1] + 10
@@ -105,7 +105,8 @@ while (count < 10):
                     f.write(item)
             # pcov[1] = pcov[1] + 10
             # pfc[0] = pfc[0] + 10.
-            pfc[0] = pfc[0] + 1.
+            # pfc[0] = pfc[0] + 1.
+            pfc[0] = pfc[0] + 0.1
             # pcov[0] = pcov[0] + 10
             # pfc[1] = pfc[1] + 10
             # pfc[0] = pfc[0] + 0.1
@@ -125,7 +126,8 @@ while (count < 10):
             for item in acc_list:
                 f.write(item)
         # pfc[0] = pfc[0] + 10.
-        pfc[0] = pfc[0] + 1.
+        # pfc[0] = pfc[0] + 1.
+        pfc[0] = pfc[0] + 0.1
         # pcov[0] = pcov[0] + 10
         # pfc[1] = pfc[1] + 10
         # pfc[0] = pfc[0] + 0.1
