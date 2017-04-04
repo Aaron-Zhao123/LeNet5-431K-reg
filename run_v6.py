@@ -67,7 +67,7 @@ for lnorm1 in lambda1_list:
     ('-train',True),
     ('-weight_file_name', save_name),
     ('-shakeout_c', 10.),
-    ('-parent_dir', parent_dir)
+    ('-parent_dir', parent_dir),
     ('-nopruning', True)
     ]
     acc = training_l1.main(param)
