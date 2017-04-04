@@ -63,7 +63,7 @@ for lnorm1 in lambda1_list:
     ('-lr',lr),
     ('-norm1',l1),
     ('-norm2',l2),
-    ('-dropout', 0.75),
+    ('-dropout', 0.5),
     ('-train',True),
     ('-weight_file_name', save_name),
     ('-shakeout_c', 10.),
