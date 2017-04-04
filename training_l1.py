@@ -201,7 +201,7 @@ def prune_weights(pruning_cov, pruning_cov2, pruning_fc, pruning_fc2, weights, w
             biases_mask[key] = np.abs(biase) > b_threshold[key]
     pf_name = compute_file_name([pruning_cov, pruning_cov2], [pruning_fc, pruning_fc2])
     print(pf_name)
-    sys.exit()
+    # sys.exit()
     file_name = parent_dir + 'weights/' + pf_name + '.pkl'
 
     with open(file_name, 'wb') as f:
@@ -513,23 +513,9 @@ def main(argv = None):
                                     keep_prob: 1.})
                             print('test accuracy is {}'.format(test_accuracy))
                             # if (epoch > 300 or test_accuracy > 0.990):
-                            if (epoch > 500):
-                                print('saving pkl...')
-                                file_name = parent_dir + 'weights/' + weight_file_name
-                                print(file_name)
-                                with open(file_name, 'wb') as f:
-                                    pickle.dump((
-                                        weights['cov1'].eval(),
-                                        weights['cov2'].eval(),
-                                        weights['fc1'].eval(),
-                                        weights['fc2'].eval(),
-                                        biases['cov1'].eval(),
-                                        biases['cov2'].eval(),
-                                        biases['fc1'].eval(),
-                                        biases['fc2'].eval()),f)
-
-                                # mask_info(weights_mask)
-                                return (test_accuracy, iter_cnt)
+                            if (epoch > 500 or test_accuracy > 0.9924):
+                                print('stop training...')
+                                break
                             else:
                                 pass
                         with open('log/data.txt',"a") as output_file:
@@ -539,8 +525,22 @@ def main(argv = None):
                     # Display logs per epoch step
                     print("Epoch:", '%04d' % (epoch+1), "cost=", "{:.9f}".format(avg_cost))
                 print("Optimization Finished!")
+                file_name = parent_dir + 'weights/' + weight_file_name
+                print(file_name)
+                with open(file_name, 'wb') as f:
+                    pickle.dump((
+                        weights['cov1'].eval(),
+                        weights['cov2'].eval(),
+                        weights['fc1'].eval(),
+                        weights['fc2'].eval(),
+                        biases['cov1'].eval(),
+                        biases['cov2'].eval(),
+                        biases['fc1'].eval(),
+                        biases['fc2'].eval()),f)
+
+                # mask_info(weights_mask)
                 # Test model
-                correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
+                return (test_accuracy, iter_cnt)
             if (PRUNE_ONLY == True):
                 print('hi in pruning')
                 prune_weights(  pruning_cov,
@@ -555,6 +555,7 @@ def main(argv = None):
                                 weight_file_name)
                 mask_info(weights_mask)
             # Calculate accuracy
+            correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
             accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
             test_accuracy = accuracy.eval({x: mnist.test.images, y: mnist.test.labels, keep_prob : 1.0})
             print("Accuracy:", test_accuracy)
