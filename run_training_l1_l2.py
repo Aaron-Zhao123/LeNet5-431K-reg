@@ -20,16 +20,16 @@ def compute_file_name(pcov, pfc):
 
 acc_list = []
 count = 0
-pcov = [0., 90.]
-pfc = [99.8, 0.]
+pcov = [0., 0.]
+pfc = [0., 0.]
 
 retrain = 0
 lr = 1e-4
 f_name = compute_file_name(pcov,pfc)
-# pfc[0] = pfc[0] + 0.1
+pfc[0] = pfc[0] + 10.
 # pcov[1] = pcov[1] + 10
-pcov[0] = pcov[0] + 10
-pfc[1] = pfc[1] + 10
+# pcov[0] = pcov[0] + 10
+# pfc[1] = pfc[1] + 10
 
 while (count < 10):
     if (retrain == 0):
@@ -43,7 +43,8 @@ while (count < 10):
     l1, l2 = compute_lambda.main(fetch_lambdas_params)
     l1 = 0.
     l2 = 0.
-
+    l1 = 1e-7
+    l2 = 1e-4
     # prune
     param = [
     ('-pcov',pcov[0]),
@@ -56,7 +57,7 @@ while (count < 10):
     ('-lr',lr),
     ('-norm1',l1),
     ('-norm2',l2),
-    ('-dropout', 1.),
+    ('-dropout', 0.5),
     ('-PRUNE',True),
     ('-TRAIN',False),
     ('-parent_dir',parent_dir)
@@ -77,7 +78,7 @@ while (count < 10):
     ('-lr',lr),
     ('-norm1',l1),
     ('-norm2',l2),
-    ('-dropout', 1.),
+    ('-dropout', 0.5),
     ('-PRUNE',False),
     ('-TRAIN',True),
     ('-parent_dir',parent_dir)
@@ -85,7 +86,8 @@ while (count < 10):
     acc,iter_cnt = training_l1.main(param)
 
     # if (acc < 0.98710):
-    if (acc < 0.9658):
+    # if (acc < 0.9658):
+    if (acc < 0.9924):
         retrain += 1
         lr = lr / float(2)
         if (retrain > 3):
@@ -99,8 +101,9 @@ while (count < 10):
                 for item in acc_list:
                     f.write(item)
             # pcov[1] = pcov[1] + 10
-            pcov[0] = pcov[0] + 10
-            pfc[1] = pfc[1] + 10
+            pfc[0] = pfc[0] + 10.
+            # pcov[0] = pcov[0] + 10
+            # pfc[1] = pfc[1] + 10
             # pfc[0] = pfc[0] + 0.1
             # pcov[1] = pcov[1] + 10
             # pcov[0] = pcov[0] + 10
@@ -117,8 +120,9 @@ while (count < 10):
         with open("hist.txt","w") as f:
             for item in acc_list:
                 f.write(item)
-        pcov[0] = pcov[0] + 10
-        pfc[1] = pfc[1] + 10
+        pfc[0] = pfc[0] + 10.
+        # pcov[0] = pcov[0] + 10
+        # pfc[1] = pfc[1] + 10
         # pfc[0] = pfc[0] + 0.1
         # pcov[1] = pcov[1] + 10
         # pcov[1] = pcov[1] + 10
