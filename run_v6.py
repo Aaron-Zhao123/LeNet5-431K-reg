@@ -68,6 +68,7 @@ for lnorm1 in lambda1_list:
     ('-weight_file_name', save_name),
     ('-shakeout_c', 10.),
     ('-parent_dir', parent_dir)
+    ('-nopruning', True)
     ]
     acc = training_l1.main(param)
     model_tag = 'pcov'+str(pcov)+'pcov'+str(pcov2)+'pfc'+str(pfc)+'pfc'+str(pfc2)

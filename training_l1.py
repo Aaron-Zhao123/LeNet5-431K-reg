@@ -54,39 +54,41 @@ def compute_file_name(pcov, pfc):
     return name
 
 # Store layers weight & bias
-def initialize_variables(model_number):
-    print(model_number)
-    with open(model_number,'rb') as f:
-        wc1, wc2, wd1, out, bc1, bc2, bd1, bout = pickle.load(f)
-    weights = {
-        # 5x5 conv, 1 input, 32 outputs
-        'cov1': tf.Variable(wc1),
-        # 5x5 conv, 32 inputs, 64 outputs
-        'cov2': tf.Variable(wc2),
-        # fully connected, 7*7*64 inputs, 1024 outputs
-        'fc1': tf.Variable(wd1),
-        # 1024 inputs, 10 outputs (class prediction)
-        'fc2': tf.Variable(out)
-    }
+def initialize_variables(model_number, no_pruning):
+    if (no_pruning == False):
+        print(model_number)
+        with open(model_number,'rb') as f:
+            wc1, wc2, wd1, out, bc1, bc2, bd1, bout = pickle.load(f)
+        weights = {
+            # 5x5 conv, 1 input, 32 outputs
+            'cov1': tf.Variable(wc1),
+            # 5x5 conv, 32 inputs, 64 outputs
+            'cov2': tf.Variable(wc2),
+            # fully connected, 7*7*64 inputs, 1024 outputs
+            'fc1': tf.Variable(wd1),
+            # 1024 inputs, 10 outputs (class prediction)
+            'fc2': tf.Variable(out)
+        }
 
-    biases = {
-        'cov1': tf.Variable(bc1),
-        'cov2': tf.Variable(bc2),
-        'fc1': tf.Variable(bd1),
-        'fc2': tf.Variable(bout)
-    }
-    # weights = {
-    #     'cov1': tf.Variable(tf.truncated_normal([5, 5, NUM_CHANNELS, 20], stddev=0.1)),
-    #     'cov2': tf.Variable(tf.truncated_normal([5, 5, 20, 50], stddev=0.1)),
-    #     'fc1': tf.Variable(tf.truncated_normal([ 4 * 4 * 50, 500])),
-    #     'fc2': tf.Variable(tf.truncated_normal([500, 10]))
-    # }
-    # biases = {
-    #     'cov1': tf.Variable(tf.random_normal([20])),
-    #     'cov2': tf.Variable(tf.random_normal([50])),
-    #     'fc1': tf.Variable(tf.random_normal([500])),
-    #     'fc2': tf.Variable(tf.random_normal([10]))
-    # }
+        biases = {
+            'cov1': tf.Variable(bc1),
+            'cov2': tf.Variable(bc2),
+            'fc1': tf.Variable(bd1),
+            'fc2': tf.Variable(bout)
+        }
+    else:
+        weights = {
+            'cov1': tf.Variable(tf.truncated_normal([5, 5, NUM_CHANNELS, 20], stddev=0.1)),
+            'cov2': tf.Variable(tf.truncated_normal([5, 5, 20, 50], stddev=0.1)),
+            'fc1': tf.Variable(tf.truncated_normal([ 4 * 4 * 50, 500])),
+            'fc2': tf.Variable(tf.truncated_normal([500, 10]))
+        }
+        biases = {
+            'cov1': tf.Variable(tf.random_normal([20])),
+            'cov2': tf.Variable(tf.random_normal([50])),
+            'fc1': tf.Variable(tf.random_normal([500])),
+            'fc2': tf.Variable(tf.random_normal([10]))
+        }
     return (weights, biases)
 #store the masks
 # weights_mask = {
@@ -314,6 +316,7 @@ def main(argv = None):
             dropout = 1
             shakeout_const = 10.
             weight_file_name = 'tmp'
+            no_pruning = False
             for item in opts:
                 print (item)
                 opt = item[0]
@@ -348,6 +351,8 @@ def main(argv = None):
                     PRUNE_ONLY = val
                 if (opt == '-TRAIN'):
                     TRAIN = val
+                if (opt == '-nopruning'):
+                    no_pruning = val
             print('pruning percentage for cov and fc are {},{}'.format(pruning_cov, pruning_fc))
             print('Train values:',TRAIN)
         except getopt.error, msg:
@@ -360,20 +365,22 @@ def main(argv = None):
         pruning_fc2 = int(pruning_fc2)
 
         if (TRAIN == True):
-            # weights_mask = {
-            #     'cov1': np.ones([5, 5, NUM_CHANNELS, 20]),
-            #     'cov2': np.ones([5, 5, 20, 50]),
-            #     'fc1': np.ones([4 * 4 * 50, 500]),
-            #     'fc2': np.ones([500, NUM_LABELS])
-            # }
-            # biases_mask = {
-            #     'cov1': np.ones([20]),
-            #     'cov2': np.ones([50]),
-            #     'fc1': np.ones([500]),
-            #     'fc2': np.ones([10])
-            # }
-            with open(parent_dir + 'masks/' + weight_file_name,'rb') as f:
-                (weights_mask,biases_mask) = pickle.load(f)
+            if (no_pruning):
+                weights_mask = {
+                    'cov1': np.ones([5, 5, NUM_CHANNELS, 20]),
+                    'cov2': np.ones([5, 5, 20, 50]),
+                    'fc1': np.ones([4 * 4 * 50, 500]),
+                    'fc2': np.ones([500, NUM_LABELS])
+                }
+                biases_mask = {
+                    'cov1': np.ones([20]),
+                    'cov2': np.ones([50]),
+                    'fc1': np.ones([500]),
+                    'fc2': np.ones([10])
+                }
+            else:
+                with open(parent_dir + 'masks/' + weight_file_name,'rb') as f:
+                    (weights_mask,biases_mask) = pickle.load(f)
         else:
             weights_mask = {
                 'cov1': np.ones([5, 5, NUM_CHANNELS, 20]),
@@ -397,7 +404,7 @@ def main(argv = None):
         keys = ['cov1','cov2','fc1','fc2']
 
         x_image = tf.reshape(x,[-1,28,28,1])
-        (weights, biases) = initialize_variables(parent_dir+ 'weights/' +weight_file_name)
+        (weights, biases) = initialize_variables(parent_dir+ 'weights/' +weight_file_name, no_pruning)
         # Construct model
         pred, pool, l1, l2, hidden_before, hidden_after,  prob, rj_hat, wj, rj, k_rate= conv_network(x_image, weights, biases, keep_prob, shakeout_const)
         # lambda_1 = 0.00001
@@ -496,7 +503,8 @@ def main(argv = None):
                                     y: mnist.test.labels[:],
                                     keep_prob: 1.})
                             print('test accuracy is {}'.format(test_accuracy))
-                            if (epoch > 300 or test_accuracy > 0.990):
+                            # if (epoch > 300 or test_accuracy > 0.990):
+                            if (epoch > 300):
                                 print('saving pkl...')
                                 file_name = parent_dir + 'weights/' + weight_file_name
                                 print(file_name)
@@ -511,7 +519,7 @@ def main(argv = None):
                                         biases['fc1'].eval(),
                                         biases['fc2'].eval()),f)
 
-                                mask_info(weights_mask)
+                                # mask_info(weights_mask)
                                 return (test_accuracy, iter_cnt)
                             else:
                                 pass
