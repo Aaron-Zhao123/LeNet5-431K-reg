@@ -22,7 +22,7 @@ pfc2 = 0
 # ]
 # acc = training_v6.main(param)
 retrain = 0
-lr = 1e-6
+lr = 1e-4
 model_tag = 'pcov'+str(pcov)+'pcov'+str(pcov2)+'pfc'+str(pfc)+'pfc'+str(pfc2)
 lambda1_list = [1e-3]
 # lambda1_list = [1e-3, 1e-4, 1e-5, 1e-6, 1e-7]
@@ -33,7 +33,7 @@ shakeout_rate_list = [0.2, 0.4, 0.6, 0.8, 1]
 dropout_rate_list= [0.8]
 c_list = [0.5,1,2,4,10]
 lambda2 = 0.0005
-dropout_rate = 0.75
+dropout_rate = 0.5
 parent_dir = './weights/norm1/'
 
 # for shake_rate in shakeout_rate_list:
