@@ -482,7 +482,7 @@ def main(argv = None):
                                 keep_prob: 1.})
                             accuracy_list = np.concatenate((np.array([train_accuracy]),accuracy_list[0:19]))
                             accuracy_mean = np.mean(accuracy_list)
-                            
+
                         if (training_cnt % 1000 == 0):
                             weights_info(training_cnt, c, train_accuracy, accuracy_mean)
                             mask_info(weights_mask)

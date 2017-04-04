@@ -33,7 +33,7 @@ shakeout_rate_list = [0.2, 0.4, 0.6, 0.8, 1]
 dropout_rate_list= [0.8]
 c_list = [0.5,1,2,4,10]
 lambda2 = 0.0005
-dropout_rate = 1
+dropout_rate = 0.75
 parent_dir = './weights/norm1/'
 
 # for shake_rate in shakeout_rate_list:
