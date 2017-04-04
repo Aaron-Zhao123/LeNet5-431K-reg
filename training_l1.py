@@ -515,7 +515,22 @@ def main(argv = None):
                             # if (epoch > 300 or test_accuracy > 0.990):
                             if (epoch > 500 or test_accuracy > 0.9924):
                                 print('stop training...')
-                                break
+                                file_name = parent_dir + 'weights/' + weight_file_name
+                                print(file_name)
+                                with open(file_name, 'wb') as f:
+                                    pickle.dump((
+                                        weights['cov1'].eval(),
+                                        weights['cov2'].eval(),
+                                        weights['fc1'].eval(),
+                                        weights['fc2'].eval(),
+                                        biases['cov1'].eval(),
+                                        biases['cov2'].eval(),
+                                        biases['fc1'].eval(),
+                                        biases['fc2'].eval()),f)
+
+                                # mask_info(weights_mask)
+                                # Test model
+                                return (test_accuracy, iter_cnt)
                             else:
                                 pass
                         with open('log/data.txt',"a") as output_file:
