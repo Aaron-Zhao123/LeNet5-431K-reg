@@ -513,7 +513,8 @@ def main(argv = None):
                                     keep_prob: 1.})
                             print('test accuracy is {}'.format(test_accuracy))
                             # if (epoch > 300 or test_accuracy > 0.990):
-                            if (epoch > 200 or test_accuracy > 0.9924):
+                            # if (epoch > 200 or test_accuracy > 0.9924):
+                            if (epoch > 500 or test_accuracy > 0.9936):
                                 print('stop training...')
                                 file_name = parent_dir + 'weights/' + weight_file_name
                                 print(file_name)
