@@ -19,7 +19,7 @@ class Usage(Exception):
 
 # Parameters
 # training_epochs = 500
-training_epochs = 600
+training_epochs = 700
 batch_size = 64
 display_step = 1
 
@@ -503,7 +503,7 @@ def main(argv = None):
                             weights_info(training_cnt, c, train_accuracy, accuracy_mean)
                             mask_info(weights_mask)
 
-                        if (accuracy_mean > 0.985 or epoch > 500):
+                        if (accuracy_mean > 0.99 or epoch > 600):
                             accuracy_list = np.zeros(20)
                             accuracy_mean = 0
                             print('Training ends')
@@ -514,7 +514,7 @@ def main(argv = None):
                             print('test accuracy is {}'.format(test_accuracy))
                             # if (epoch > 300 or test_accuracy > 0.990):
                             # if (epoch > 200 or test_accuracy > 0.9924):
-                            if (epoch > 500 or test_accuracy > 0.9936):
+                            if (epoch > 600 or test_accuracy > 0.9936):
                                 print('stop training...')
                                 file_name = parent_dir + 'weights/' + weight_file_name
                                 print(file_name)
