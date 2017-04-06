@@ -24,12 +24,8 @@ pfc2 = 0
 retrain = 0
 lr = 1e-4
 model_tag = 'pcov'+str(pcov)+'pcov'+str(pcov2)+'pfc'+str(pfc)+'pfc'+str(pfc2)
-lambda1_list = [1e-3]
-# lambda1_list = [1e-3, 1e-4, 1e-5, 1e-6, 1e-7]
-# lambda2_list = [1e-2, 1e-3, 1e-4, 1e-5, 1e-6]
-# lambda2_list = [1e-4]
-dropout_rate_list= [0.2, 0.4, 0.6, 0.8, 1]
-shakeout_rate_list = [0.2, 0.4, 0.6, 0.8, 1]
+dropout_rate_list= [0.25, 0.5, 0.85, 1]
+shakeout_rate_list = [0.25, 0.5, 0.85, 1]
 dropout_rate_list= [0.8]
 c_list = [0.5,1,2,4,10]
 lambda2 = 0.0005
@@ -37,9 +33,9 @@ dropout_rate = 0.5
 parent_dir = './weights/norm1/'
 
 # for shake_rate in shakeout_rate_list:
-for lnorm1 in lambda1_list:
+for keep_rate in dropout_rate_list:
     # save_name = 'norm1'+'val'+str(0) +'.pkl'
-    save_name = 'cov0cov0fc0fc0'+'.pkl'
+    save_name = 'cov0cov0fc0fc0'+'kr'+str(int(keep_rate*100))+'.pkl'
     # save_name = 'tmp' + str(shakeout_rate_list.index(shake_rate) + 1) + '.pkl'
     # save_name = 'tmp' + '.pkl'
     fetch_lambdas_params = [
@@ -48,10 +44,10 @@ for lnorm1 in lambda1_list:
         ('-file_name', save_name)
     ]
     l1, l2 = compute_lambda.main(fetch_lambdas_params)
-    l1 = 1e-7
-    l2 = 1e-4
-    # l1 = 0
-    # l2 = 0
+    # l1 = 1e-7
+    # l2 = 1e-4
+    l1 = 0
+    l2 = 0
     print('picked l1 l2 to be {},{}'.format(l1,l2))
     # sys.exit()
     param = [
@@ -63,7 +59,7 @@ for lnorm1 in lambda1_list:
     ('-lr',lr),
     ('-norm1',l1),
     ('-norm2',l2),
-    ('-dropout', 0.5),
+    ('-dropout', keep_rate),
     ('-train',True),
     ('-weight_file_name', save_name),
     ('-shakeout_c', 10.),
