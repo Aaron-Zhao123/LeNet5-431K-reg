@@ -49,23 +49,29 @@ for keep_rate in dropout_rate_list:
     l2 = 0
     print('picked l1 l2 to be {},{}'.format(l1,l2))
     # sys.exit()
-    param = [
-    ('-pcov',pcov),
-    ('-pcov2',pcov2),
-    ('-pfc',pfc),
-    ('-pfc2',pfc2),
-    ('-m',model_tag),
-    ('-lr',lr),
-    ('-norm1',l1),
-    ('-norm2',l2),
-    ('-dropout', keep_rate),
-    ('-train',True),
-    ('-weight_file_name', save_name),
-    ('-shakeout_c', 10.),
-    ('-parent_dir', parent_dir),
-    ('-nopruning', True)
-    ]
-    acc = training_l1.main(param)
+    if (acc < 0.9936 and retrain < 3):
+        param = [
+        ('-pcov',pcov),
+        ('-pcov2',pcov2),
+        ('-pfc',pfc),
+        ('-pfc2',pfc2),
+        ('-m',model_tag),
+        ('-lr',lr),
+        ('-norm1',l1),
+        ('-norm2',l2),
+        ('-dropout', keep_rate),
+        ('-train',True),
+        ('-weight_file_name', save_name),
+        ('-shakeout_c', 10.),
+        ('-parent_dir', parent_dir),
+        ('-nopruning', True)
+        ]
+        lr = lr / float(2)
+        acc = training_l1.main(param)
+        retrain = retrain + 1
+
+    retrain = 0
+    lr = 1e-4
     model_tag = 'pcov'+str(pcov)+'pcov'+str(pcov2)+'pfc'+str(pfc)+'pfc'+str(pfc2)
     acc_list.append(acc)
 
