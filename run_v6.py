@@ -50,7 +50,7 @@ for keep_rate in dropout_rate_list:
     print('picked l1 l2 to be {},{}'.format(l1,l2))
     # sys.exit()
     acc = 0
-    if (acc < 0.9936 and retrain < 3):
+    while (acc < 0.9936 and retrain < 3):
         param = [
         ('-pcov',pcov),
         ('-pcov2',pcov2),
