@@ -450,7 +450,7 @@ def main(argv = None):
 
         init = tf.initialize_all_variables()
         # Launch the graph
-        gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.333)
+        gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=1.)
         with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
             sess.run(init)
             # restore model if exists
@@ -459,15 +459,7 @@ def main(argv = None):
             # retain the masks on the weights
             for key in keys:
                 sess.run(weights[key].assign(weights[key].eval()*weights_mask[key]))
-            # print(np.mean(weights_mask['cov1'].flatten()))
-            # print(np.mean(weights_mask['fc1'].flatten()))
-
-            # print(weights_mask['cov1'].flatten())
-            # print(weights['cov1'].eval().flatten())
-            # print('Before training....')
             prune_info(weights,1)
-            # exit()
-            # plot_weights(weights, 'before_training'+ str(pruning_number))
             # Training cycle
             training_cnt = 0
             pruning_cnt = 0
@@ -493,7 +485,7 @@ def main(argv = None):
                                 y: batch_y,
                                 keep_prob: dropout})
                         training_cnt = training_cnt + 1
-                        if (training_cnt % 10 == 0):
+                        if (training_cnt % 100 == 0):
                             [c, train_accuracy] = sess.run([cost, accuracy], feed_dict = {
                                 x: batch_x,
                                 y: batch_y,
@@ -506,7 +498,7 @@ def main(argv = None):
                             mask_info(weights_mask)
 
                         # if (accuracy_mean > 0.99 or epoch > 300):
-                        if (accuracy_mean > 0.99 or epoch > 500):
+                        if (accuracy_mean > 0.9 or epoch > 500):
                             accuracy_list = np.zeros(20)
                             accuracy_mean = 0
                             print('Training ends')
