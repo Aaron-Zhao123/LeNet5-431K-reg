@@ -35,7 +35,7 @@ parent_dir = './weights/norm1/'
 # for shake_rate in shakeout_rate_list:
 for keep_rate in dropout_rate_list:
     # save_name = 'norm1'+'val'+str(0) +'.pkl'
-    save_name = 'cov0cov0fc0fc0'+'kr'+str(int(keep_rate*100))+'.pkl'
+    save_name = 'specialcov0cov0fc0fc0'+'kr'+str(int(keep_rate*100))+'.pkl'
     # save_name = 'tmp' + str(shakeout_rate_list.index(shake_rate) + 1) + '.pkl'
     # save_name = 'tmp' + '.pkl'
     fetch_lambdas_params = [
