@@ -25,7 +25,8 @@ retrain = 0
 lr = 1e-4
 model_tag = 'pcov'+str(pcov)+'pcov'+str(pcov2)+'pfc'+str(pfc)+'pfc'+str(pfc2)
 shakeout_rate_list = [0.25, 0.5, 0.85, 1]
-dropout_rate_list= [0.25, 0.85, 1]
+# dropout_rate_list= [0.25, 0.85, 1]
+dropout_rate_list= [0.5]
 c_list = [0.5,1,2,4,10]
 lambda2 = 0.0005
 dropout_rate = 0.5
@@ -43,10 +44,10 @@ for keep_rate in dropout_rate_list:
         ('-file_name', save_name)
     ]
     l1, l2 = compute_lambda.main(fetch_lambdas_params)
-    # l1 = 1e-7
-    # l2 = 1e-4
-    l1 = 0
-    l2 = 0
+    l1 = 1e-7
+    l2 = 1e-4
+    # l1 = 0
+    # l2 = 0
     print('picked l1 l2 to be {},{}'.format(l1,l2))
     # sys.exit()
     acc = 0
